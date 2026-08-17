@@ -1,0 +1,8 @@
+{
+  "function": "function:glom.reduction.flatten",
+  "line_end": 263,
+  "line_start": 189,
+  "module": "module:glom.reduction",
+  "source_file": "glom/reduction.py",
+  "type": "excision"
+}

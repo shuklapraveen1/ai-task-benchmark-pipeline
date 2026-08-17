@@ -1,0 +1,8 @@
+{
+  "function": "function:glom.mutation.assign",
+  "line_end": 213,
+  "line_start": 198,
+  "module": "module:glom.mutation",
+  "source_file": "glom/mutation.py",
+  "type": "excision"
+}

@@ -1,0 +1,8 @@
+{
+  "function": "function:glom.cli.main",
+  "line_end": 103,
+  "line_start": 101,
+  "module": "module:glom.cli",
+  "source_file": "glom/cli.py",
+  "type": "excision"
+}

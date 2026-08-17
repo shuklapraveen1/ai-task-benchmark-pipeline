@@ -1,0 +1,24 @@
+{
+  "actual": {
+    "command": [
+      ".venv/Scripts/python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "--doctest-modules",
+      "glom"
+    ],
+    "duration_seconds": 2.094000000040978,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-6yepkc5a\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.43s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "success",
+  "stage": "pass_after",
+  "task_id": "08-excision-74bf276825",
+  "verified": true
+}

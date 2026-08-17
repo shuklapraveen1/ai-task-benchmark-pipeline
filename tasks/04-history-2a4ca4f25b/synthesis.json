@@ -1,0 +1,13 @@
+{
+  "changed_files": [
+    "glom/core.py",
+    "glom/test/test_error.py"
+  ],
+  "commit": "062b0894d19faf2bf295cfc6812dd9ce268d55ff",
+  "parent": "0899ffe23b5bb5dec34893df9175504f543f6c5a",
+  "regression_tests": [
+    "glom/test/test_error.py"
+  ],
+  "subject": "got rid of repititions of root error",
+  "type": "history"
+}

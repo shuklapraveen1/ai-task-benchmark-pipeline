@@ -1,0 +1,40 @@
+{
+  "expected": "identical successful runs",
+  "first_run": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_let_vars.py::test_vars"
+    ],
+    "duration_seconds": 1.0630000000819564,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.35s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "second_run": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_let_vars.py::test_vars"
+    ],
+    "duration_seconds": 0.7339999997057021,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.03s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "stage": "determinism",
+  "task_id": "03-history-db31bbb570",
+  "verified": true
+}

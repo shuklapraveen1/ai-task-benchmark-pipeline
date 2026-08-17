@@ -1,0 +1,86 @@
+{
+  "accepted": true,
+  "task_id": "05-excision-f939591c08",
+  "validation": {
+    "deterministic_runs": [
+      {
+        "command": [
+          ".venv/Scripts/python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--doctest-modules",
+          "glom"
+        ],
+        "duration_seconds": 2.0320000001229346,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-_m2ti1mv\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.37s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      },
+      {
+        "command": [
+          ".venv/Scripts/python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--doctest-modules",
+          "glom"
+        ],
+        "duration_seconds": 1.4219999997876585,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-_m2ti1mv\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 0.73s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      }
+    ],
+    "deterministic_verified": true,
+    "fail_before": {
+      "command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ],
+      "duration_seconds": 2.0159999998286366,
+      "passed": false,
+      "return_code": 1,
+      "stderr": "",
+      "stdout": ".................s............s......................................... [ 26%]\n.........................FFFFF.......................................... [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n================================== FAILURES ===================================\n_______________________________ test_main_basic _______________________________\n\n    def test_main_basic():\n        argv = ['__', 'a.b.fail', '{\"a\": {\"b\": \"c\"}}']\n>       assert cli.main(argv) == 1\nE       assert None == 1\nE        +  where None = <function main at 0x0000024DA8A47250>(['__', 'a.b.fail', '{\"a\": {\"b\": \"c\"}}'])\nE        +    where <function main at 0x0000024DA8A47250> = cli.main\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_cli.py:121: AssertionError\n____________________________ test_main_yaml_target ____________________________\n\n    def test_main_yaml_target():\n        cwd = os.path.dirname(os.path.abspath(__file__))\n        # Handles the filepath if running tox\n        if '.tox' in cwd:\n            cwd = os.path.join(cwd.split('.tox')[0] + '/glom/test/')\n        path = os.path.join(cwd, 'data/test_valid.yaml')\n        argv = ['__', '--target-file', path, '--target-format', 'yml', 'Hello']\n>       assert cli.main(argv) == 0\nE       AssertionError: assert None == 0\nE        +  where None = <function main at 0x0000024DA8A47250>(['__', '--target-file', 'C:\\\\Users\\\\shukl\\\\AppData\\\\Local\\\\Temp\\\\task-verifier-input-copnunc8\\\\glom\\\\test\\\\data/test_valid.yaml', '--target-format', 'yml', 'Hello'])\nE        +    where <function main at 0x0000024DA8A47250> = cli.main\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_cli.py:134: AssertionError\n____________________________ test_main_toml_target ____________________________\n\n    def test_main_toml_target():\n        cwd = os.path.dirname(os.path.abspath(__file__))\n        # Handles the filepath if running tox\n        if '.tox' in cwd:\n            cwd = os.path.join(cwd.split('.tox')[0] + '/glom/test/')\n        path = os.path.join(cwd, 'data/test_valid.toml')\n        argv = ['__', '--target-file', path, '--target-format', 'toml', 'Hello']\n>       assert cli.main(argv) == 0\nE       AssertionError: assert None == 0\nE        +  where None = <function main at 0x0000024DA8A47250>(['__', '--target-file', 'C:\\\\Users\\\\shukl\\\\AppData\\\\Local\\\\Temp\\\\task-verifier-input-copnunc8\\\\glom\\\\test\\\\data/test_valid.toml', '--target-format', 'toml', 'Hello'])\nE        +    where <function main at 0x0000024DA8A47250> = cli.main\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_cli.py:151: AssertionError\n__________________ test_main_python_full_spec_python_target ___________________\n\n    def test_main_python_full_spec_python_target():\n        argv = ['__', '--target-format', 'python', '--spec-format', 'python-full', 'T[T[3].bit_length()]', '{1: 2, 2: 3, 3: 4}']\n>       assert cli.main(argv) == 0\nE       AssertionError: assert None == 0\nE        +  where None = <function main at 0x0000024DA8A47250>(['__', '--target-format', 'python', '--spec-format', 'python-full', 'T[T[3].bit_length()]', ...])\nE        +    where <function main at 0x0000024DA8A47250> = cli.main\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_cli.py:163: AssertionError\n__________________________________ test_main __________________________________\n\ntmp_path = WindowsPath('C:/Users/shukl/AppData/Local/Temp/pytest-of-shukl/pytest-1530/test_main0')\n\n    def test_main(tmp_path):\n        # TODO: pytest-cov knows how to make coverage work across\n        # subprocess boundaries...\n        os.chdir(str(tmp_path))\n        res = subprocess.check_output(['glom', 'a', '{\"a\": 3}'])\n>       assert res.decode('utf8') in ('3\\n', '3\\r\\n')  # unix or windows line end okay\nE       AssertionError: assert '' in ('3\\n', '3\\r\\n')\nE        +  where '' = <built-in method decode of bytes object at 0x0000024DA4784030>('utf8')\nE        +    where <built-in method decode of bytes object at 0x0000024DA4784030> = b''.decode\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_cli.py:174: AssertionError\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-input-copnunc8\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n=========================== short test summary info ===========================\nFAILED glom/test/test_cli.py::test_main_basic - assert None == 1\nFAILED glom/test/test_cli.py::test_main_yaml_target - AssertionError: assert ...\nFAILED glom/test/test_cli.py::test_main_toml_target - AssertionError: assert ...\nFAILED glom/test/test_cli.py::test_main_python_full_spec_python_target - Asse...\nFAILED glom/test/test_cli.py::test_main - AssertionError: assert '' in ('3\\n'...\n5 failed, 261 passed, 2 skipped, 1 warning in 1.30s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "fail_before_verified": true,
+    "pass_after": {
+      "command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ],
+      "duration_seconds": 2.0320000001229346,
+      "passed": true,
+      "return_code": 0,
+      "stderr": "",
+      "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-_m2ti1mv\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.37s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "warnings": []
+}

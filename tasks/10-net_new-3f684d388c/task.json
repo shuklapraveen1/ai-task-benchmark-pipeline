@@ -1,0 +1,63 @@
+{
+  "accepted": true,
+  "candidate": {
+    "description": "Return the supplied value unchanged.",
+    "function_name": "__benchmark_new_behavior",
+    "module": "glom.matching",
+    "rationale": "Synthetic net-new identity behavior anchored to an existing repository Python module.",
+    "signature": "def __benchmark_new_behavior(value)",
+    "solution_body": "return value",
+    "source_file": "glom/matching.py",
+    "stub_body": "return None"
+  },
+  "difficulty": "easy",
+  "difficulty_reason": "The task is localized to a single file, so the implementation scope is narrow and focused.",
+  "files_in_scope": [
+    "glom/matching.py"
+  ],
+  "id": "net_new:3f684d388ceb65e4",
+  "instruction": "Implement the new behavior for glom.matching: Return the supplied value unchanged. The implementation must satisfy the task-local tests.",
+  "module": "glom.matching",
+  "paths": {
+    "evidence": "evidence",
+    "input": "input",
+    "solution": "solution",
+    "verifier": "verifier"
+  },
+  "provenance": {
+    "module": "glom.matching",
+    "source": "net-new",
+    "target_function": "__benchmark_new_behavior"
+  },
+  "schema_version": "1.0",
+  "synthesis": {
+    "changed_files": [
+      "glom/matching.py"
+    ],
+    "input_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/10-net_new-3f684d388c/input",
+    "solution_commit": null,
+    "solution_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/10-net_new-3f684d388c/solution",
+    "source_commit": null,
+    "task_type": "net_new",
+    "verifier_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/10-net_new-3f684d388c/verifier",
+    "warnings": []
+  },
+  "task_id": "net_new:3f684d388ceb65e4",
+  "title": "Implement new behavior in __benchmark_new_behavior",
+  "type": "net_new",
+  "validation_status": "passed",
+  "verification": {
+    "deterministic_verified": true,
+    "fail_before_verified": true,
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "verifier_command": [
+    "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "generated_test.py"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Return the supplied value unchanged.",
+  "function": "__benchmark_new_behavior",
+  "module": "glom._version",
+  "rationale": "Synthetic net-new identity behavior anchored to an existing repository Python module.",
+  "source_file": "glom/_version.py",
+  "type": "net_new",
+  "verifier_test": "verifier/generated_test.py"
+}

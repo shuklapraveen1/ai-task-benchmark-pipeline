@@ -1,0 +1,42 @@
+{
+  "expected": "identical successful runs",
+  "first_run": {
+    "command": [
+      ".venv/Scripts/python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "--doctest-modules",
+      "glom"
+    ],
+    "duration_seconds": 1.9690000000409782,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-6sj48mrl\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.33s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "second_run": {
+    "command": [
+      ".venv/Scripts/python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "--doctest-modules",
+      "glom"
+    ],
+    "duration_seconds": 1.4059999999590218,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-6sj48mrl\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 0.76s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "stage": "determinism",
+  "task_id": "06-excision-aa8e83349b",
+  "verified": true
+}

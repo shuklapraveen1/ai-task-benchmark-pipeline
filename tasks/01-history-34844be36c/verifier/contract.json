@@ -1,0 +1,8 @@
+{
+  "state_machine": [
+    "fail_before",
+    "pass_after",
+    "determinism"
+  ],
+  "strict": true
+}

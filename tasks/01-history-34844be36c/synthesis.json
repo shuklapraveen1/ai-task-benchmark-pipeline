@@ -1,0 +1,19 @@
+{
+  "changed_files": [
+    "glom/__init__.py",
+    "glom/core.py",
+    "glom/matching.py",
+    "glom/test/test_basic.py",
+    "glom/test/test_let_vars.py",
+    "glom/test/test_match.py"
+  ],
+  "commit": "efddd66371d14bace5dba919232cd809c1d83163",
+  "parent": "4060fa593a2d8e024d526746450833322547f604",
+  "regression_tests": [
+    "glom/test/test_basic.py",
+    "glom/test/test_let_vars.py",
+    "glom/test/test_match.py"
+  ],
+  "subject": "rename Literal to Val, keeping backwards compat",
+  "type": "history"
+}

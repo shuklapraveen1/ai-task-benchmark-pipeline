@@ -1,0 +1,86 @@
+{
+  "accepted": true,
+  "task_id": "07-excision-46ccfd8382",
+  "validation": {
+    "deterministic_runs": [
+      {
+        "command": [
+          ".venv/Scripts/python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--doctest-modules",
+          "glom"
+        ],
+        "duration_seconds": 1.9679999998770654,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-xwvg2slp\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.32s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      },
+      {
+        "command": [
+          ".venv/Scripts/python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--doctest-modules",
+          "glom"
+        ],
+        "duration_seconds": 1.4070000001229346,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-xwvg2slp\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 0.72s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      }
+    ],
+    "deterministic_verified": true,
+    "fail_before": {
+      "command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ],
+      "duration_seconds": 2.0780000002123415,
+      "passed": false,
+      "return_code": 1,
+      "stderr": "",
+      "stdout": ".................s............s.........F............................... [ 26%]\n........................................................................ [ 53%]\n..........F...FFFFFFFF.................................................. [ 80%]\n...................................................                      [100%]\n================================== FAILURES ===================================\n_______________________ [doctest] glom.mutation.Assign ________________________\n120     :class:`~glom.PathAssignError`. Attempting to assign to a path\n121     that doesn't exist will raise a :class:`~PathAccessError`.\n122 \n123     To automatically backfill missing structures, you can pass a\n124     callable to the *missing* argument. This callable will be called\n125     for each path segment along the assignment which is not\n126     present.\n127 \n128        >>> target = {}\n129        >>> assign(target, 'a.b.c', 'hi', missing=dict)\nExpected:\n    {'a': {'b': {'c': 'hi'}}}\nGot nothing\n\nC:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-input-3c705x26\\glom\\mutation.py:129: DocTestFailure\n_________________________________ test_assign _________________________________\n\n    def test_assign():\n        class Foo:\n            pass\n    \n        assert glom({}, Assign(T['a'], 1)) == {'a': 1}\n        assert glom({'a': {}}, Assign(T['a']['a'], 1)) == {'a': {'a': 1}}\n        assert glom({'a': {}}, Assign('a.a', 1)) == {'a': {'a': 1}}\n        assert glom(Foo(), Assign(T.a, 1)).a == 1\n        assert glom({}, Assign('a', 1)) == {'a': 1}\n        assert glom(Foo(), Assign('a', 1)).a == 1\n        assert glom({'a': Foo()}, Assign('a.a', 1))['a'].a == 1\n        def r():\n            r = {}\n            r['r'] = r\n            return r\n        assert glom(r(), Assign('r.r.r.r.r.r.r.r.r', 1)) == {'r': 1}\n        assert glom(r(), Assign(T['r']['r']['r']['r'], 1)) == {'r': 1}\n        assert glom(r(), Assign(Path('r', 'r', T['r']), 1)) == {'r': 1}\n>       assert assign(r(), Path('r', 'r', T['r']), 1) == {'r': 1}\nE       AssertionError: assert None == {'r': 1}\nE        +  where None = assign({'r': {'r': {'r': {'r': {'r': {'r': {...}}}}}}}, Path('r', 'r', T['r']), 1)\nE        +    where {'r': {'r': {'r': {'r': {'r': {'r': {...}}}}}}} = <function test_assign.<locals>.r at 0x000001BB1AF91900>()\nE        +    and   Path('r', 'r', T['r']) = Path('r', 'r', T['r'])\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:27: AssertionError\n___________________________ test_bad_assign_target ____________________________\n\n    def test_bad_assign_target():\n        class BadTarget:\n            def __setattr__(self, name, val):\n                raise Exception(\"and you trusted me?\")\n    \n        # sanity check\n        spec = Assign('a', 'b')\n        ok_target = lambda: None\n        glom(ok_target, spec)\n        assert ok_target.a == 'b'\n    \n        with pytest.raises(PathAssignError, match='could not assign'):\n            glom(BadTarget(), spec)\n    \n>       with pytest.raises(PathAccessError, match='could not access'):\nE       Failed: DID NOT RAISE <class 'glom.core.PathAccessError'>\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:79: Failed\n____________________________ test_sequence_assign _____________________________\n\n    def test_sequence_assign():\n        target = {'alist': [0, 1, 2]}\n        assign(target, 'alist.2', 3)\n>       assert target['alist'][2] == 3\nE       assert 2 == 3\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:87: AssertionError\n________________________ test_invalid_assign_op_target ________________________\n\n    def test_invalid_assign_op_target():\n        target = {'afunc': lambda x: 'hi %s' % x}\n        spec = T['afunc'](x=1)\n    \n>       with pytest.raises(ValueError):\nE       Failed: DID NOT RAISE <class 'ValueError'>\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:107: Failed\n________________________ test_assign_missing_signature ________________________\n\n    def test_assign_missing_signature():\n        # test signature (non-callable missing hook)\n>       with pytest.raises(TypeError, match='callable'):\nE       Failed: DID NOT RAISE <class 'TypeError'>\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:114: Failed\n__________________________ test_assign_missing_dict ___________________________\n\n    def test_assign_missing_dict():\n        target = {}\n        val = object()\n    \n        from itertools import count\n        counter = count()\n        def debugdict():\n            ret = dict()\n            #ret['id'] = id(ret)\n            #ret['inc'] = counter.next()\n            return ret\n    \n        assign(target, 'a.b.c.d', val, missing=debugdict)\n    \n>       assert target == {'a': {'b': {'c': {'d': val}}}}\nE       AssertionError: assert {} == {'a': {'b': {...B169B7980>}}}}\nE         Right contains 1 more item:\nE         {'a': {'b': {'c': {'d': <object object at 0x000001BB169B7980>}}}}\nE         Full diff:\nE         - {'a': {'b': {'c': {'d': <object object at 0x000001BB169B7980>}}}}\nE         + {}\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:133: AssertionError\n_________________________ test_assign_missing_object __________________________\n\n    def test_assign_missing_object():\n        val = object()\n        class Container:\n            pass\n    \n        target = Container()\n        target.a = extant_a = Container()\n        assign(target, 'a.b.c.d', val, missing=Container)\n    \n>       assert target.a.b.c.d is val\nE       AttributeError: 'Container' object has no attribute 'b'\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:145: AttributeError\n____________________ test_assign_missing_with_extant_keys _____________________\n\n    def test_assign_missing_with_extant_keys():\n        \"\"\"This test ensures that assign with missing doesn't overwrite\n        perfectly fine extant keys that are along the path it needs to\n        assign to. call count is also checked to make sure missing() isn't\n        invoked too many times.\n    \n        \"\"\"\n        target = {}\n        value = object()\n        default_struct = {'b': {'c': {}}}\n    \n        call_count = [0]\n    \n        def _get_default_struct():\n            call_count[0] += 1  # make sure this is only called once\n            return default_struct\n    \n        assign(target, 'a.b.c', value, missing=_get_default_struct)\n    \n>       assert target['a']['b']['c'] is value\nE       KeyError: 'a'\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:168: KeyError\n______________________ test_assign_missing_unassignable _______________________\n\n    def test_assign_missing_unassignable():\n        \"\"\"Check that the final assignment to the target object comes last,\n        ensuring that failed assignments don't leave targets in a bad\n        state.\n    \n        \"\"\"\n    \n        class Tarjay:\n            init_count = 0\n            def __init__(self):\n                self.__class__.init_count += 1\n    \n            @property\n            def unassignable(self):\n                return\n    \n        value = object()\n        target = {\"preexisting\": \"ok\"}\n    \n>       with pytest.raises(PathAssignError):\nE       Failed: DID NOT RAISE <class 'glom.core.PathAssignError'>\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_mutation.py:192: Failed\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-input-3c705x26\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n=========================== short test summary info ===========================\nFAILED glom/mutation.py::glom.mutation.Assign\nFAILED glom/test/test_mutation.py::test_assign - AssertionError: assert None ...\nFAILED glom/test/test_mutation.py::test_bad_assign_target - Failed: DID NOT R...\nFAILED glom/test/test_mutation.py::test_sequence_assign - assert 2 == 3\nFAILED glom/test/test_mutation.py::test_invalid_assign_op_target - Failed: DI...\nFAILED glom/test/test_mutation.py::test_assign_missing_signature - Failed: DI...\nFAILED glom/test/test_mutation.py::test_assign_missing_dict - AssertionError:...\nFAILED glom/test/test_mutation.py::test_assign_missing_object - AttributeErro...\nFAILED glom/test/test_mutation.py::test_assign_missing_with_extant_keys - Key...\nFAILED glom/test/test_mutation.py::test_assign_missing_unassignable - Failed:...\n10 failed, 255 passed, 2 skipped, 1 warning in 1.35s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "fail_before_verified": true,
+    "pass_after": {
+      "command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ],
+      "duration_seconds": 1.9679999998770654,
+      "passed": true,
+      "return_code": 0,
+      "stderr": "",
+      "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n........................................................................ [ 80%]\n....................................................                     [100%]\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-solution-xwvg2slp\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n266 passed, 2 skipped, 1 warning in 1.32s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "warnings": []
+}

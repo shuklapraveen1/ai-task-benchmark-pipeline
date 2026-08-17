@@ -1,0 +1,263 @@
+{
+  "distribution": {
+    "excision": 4,
+    "history": 4,
+    "net_new": 2
+  },
+  "failed_candidates": [
+    {
+      "candidate": "function:glom.cli.get_command",
+      "path": "tasks/05-excision-cf49d4dcfb",
+      "reason": "verification_failed",
+      "task": "05-excision-cf49d4dcfb",
+      "type": "excision"
+    },
+    {
+      "candidate": "function:glom.test.perf_report.func",
+      "path": "tasks/06-excision-d66b6906ce",
+      "reason": "verification_failed",
+      "task": "06-excision-d66b6906ce",
+      "type": "excision"
+    }
+  ],
+  "module_count": 8,
+  "modules": [
+    "glom",
+    "glom._version",
+    "glom.cli",
+    "glom.core",
+    "glom.grouping",
+    "glom.matching",
+    "glom.mutation",
+    "glom.reduction"
+  ],
+  "schema_version": "1.0",
+  "tasks": [
+    {
+      "difficulty": "easy",
+      "id": "excision:46ccfd8382788a9b",
+      "module": "glom.mutation",
+      "path": "tasks/07-excision-46ccfd8382",
+      "provenance": {
+        "module": "glom.mutation",
+        "source": "excision",
+        "target_function": "function:glom.mutation.assign"
+      },
+      "title": "Restore behavior of function:glom.mutation.assign",
+      "type": "excision",
+      "validation_status": "passed",
+      "verifier_command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "id": "excision:74bf276825df6ee7",
+      "module": "glom.reduction",
+      "path": "tasks/08-excision-74bf276825",
+      "provenance": {
+        "module": "glom.reduction",
+        "source": "excision",
+        "target_function": "function:glom.reduction.flatten"
+      },
+      "title": "Restore behavior of function:glom.reduction.flatten",
+      "type": "excision",
+      "validation_status": "passed",
+      "verifier_command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "id": "excision:aa8e83349b9c4f08",
+      "module": "glom.grouping",
+      "path": "tasks/06-excision-aa8e83349b",
+      "provenance": {
+        "module": "glom.grouping",
+        "source": "excision",
+        "target_function": "function:glom.grouping.GROUP"
+      },
+      "title": "Restore behavior of function:glom.grouping.GROUP",
+      "type": "excision",
+      "validation_status": "passed",
+      "verifier_command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "id": "excision:f939591c08ff5a09",
+      "module": "glom.cli",
+      "path": "tasks/05-excision-f939591c08",
+      "provenance": {
+        "module": "glom.cli",
+        "source": "excision",
+        "target_function": "function:glom.cli.main"
+      },
+      "title": "Restore behavior of function:glom.cli.main",
+      "type": "excision",
+      "validation_status": "passed",
+      "verifier_command": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--doctest-modules",
+        "glom"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "id": "history:2a4ca4f25b824b6b",
+      "module": "glom.core",
+      "path": "tasks/04-history-2a4ca4f25b",
+      "provenance": {
+        "fixing_commit": "062b0894d19faf2bf295cfc6812dd9ce268d55ff",
+        "parent_commit": "0899ffe23b5bb5dec34893df9175504f543f6c5a",
+        "source": "history-derived"
+      },
+      "title": "got rid of repititions of root error",
+      "type": "history",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_error.py::test_midway_branch",
+        "glom/test/test_error.py::test_short_trace"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "id": "history:34844be36c6498db",
+      "module": "glom",
+      "path": "tasks/01-history-34844be36c",
+      "provenance": {
+        "fixing_commit": "efddd66371d14bace5dba919232cd809c1d83163",
+        "parent_commit": "4060fa593a2d8e024d526746450833322547f604",
+        "source": "history-derived"
+      },
+      "title": "rename Literal to Val, keeping backwards compat",
+      "type": "history",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_basic.py::test_call_and_target",
+        "glom/test/test_basic.py::test_val",
+        "glom/test/test_let_vars.py::test_let",
+        "glom/test/test_match.py::test_check_ported_tests",
+        "glom/test/test_match.py::test_clamp",
+        "glom/test/test_match.py::test_examples",
+        "glom/test/test_match.py::test_json_ref",
+        "glom/test/test_match.py::test_pattern_matching",
+        "glom/test/test_match.py::test_precedence"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "id": "history:96a9de66a7b57da1",
+      "module": "glom.core",
+      "path": "tasks/02-history-96a9de66a7",
+      "provenance": {
+        "fixing_commit": "d1c84d2e27f2a5216564414bb7fe06417af54547",
+        "parent_commit": "28138de1da9e7c29a32368c39d2c48e79bfc369a",
+        "source": "history-derived"
+      },
+      "title": "docs refactor, fix a few bugs, tweak the stack to be a little more readable",
+      "type": "history",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_error.py::test_glom_error_double_stack",
+        "glom/test/test_error.py::test_glom_error_stack",
+        "glom/test/test_error.py::test_regular_error_stack"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "id": "history:db31bbb570b2cdb9",
+      "module": "glom.core",
+      "path": "tasks/03-history-db31bbb570",
+      "provenance": {
+        "fixing_commit": "03a833dc53fc69173e6c3c9446953e805e622b6a",
+        "parent_commit": "5484cf2179054a9870e72ac8064bc320122bb3f7",
+        "source": "history-derived"
+      },
+      "title": "fix up duplicate format_t, actually test repr of A",
+      "type": "history",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_let_vars.py::test_vars"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "id": "net_new:3f684d388ceb65e4",
+      "module": "glom.matching",
+      "path": "tasks/10-net_new-3f684d388c",
+      "provenance": {
+        "module": "glom.matching",
+        "source": "net-new",
+        "target_function": "__benchmark_new_behavior"
+      },
+      "title": "Implement new behavior in __benchmark_new_behavior",
+      "type": "net_new",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "generated_test.py"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "id": "net_new:b80b727953cb0d29",
+      "module": "glom._version",
+      "path": "tasks/09-net_new-b80b727953",
+      "provenance": {
+        "module": "glom._version",
+        "source": "net-new",
+        "target_function": "__benchmark_new_behavior"
+      },
+      "title": "Implement new behavior in __benchmark_new_behavior",
+      "type": "net_new",
+      "validation_status": "passed",
+      "verifier_command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "generated_test.py"
+      ]
+    }
+  ],
+  "total_tasks": 10
+}

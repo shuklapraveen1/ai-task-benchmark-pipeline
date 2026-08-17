@@ -1,0 +1,24 @@
+{
+  "actual": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_let_vars.py::test_vars"
+    ],
+    "duration_seconds": 1.171000000089407,
+    "passed": false,
+    "return_code": 1,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n================================== FAILURES ===================================\n__________________________________ test_vars __________________________________\n\n    def test_vars():\n        let = Let(v=Vars({'b': 2}, c=3))\n        assert glom(1, (let, A.v.a, S.v.a)) == 1\n        with pytest.raises(AttributeError):\n            glom(1, (let, S.v.a))  # check that Vars() inside a spec doesn't hold state\n        assert glom(1, (let, Path(A, 'v', 'a'), S.v.a)) == 1\n        assert glom(1, (let, S.v.b)) == 2\n        assert glom(1, (let, S.v.c)) == 3\n        assert repr(let) == \"Let(v=Vars({'b': 2}, c=3))\"\n        assert repr(Vars(a=1, b=2)) in (\n            \"Vars(a=1, b=2)\", \"Vars(b=2, a=1)\")\n        assert repr(Vars(a=1, b=2).glomit(None, None)) in (\n            \"Vars({'a': 1, 'b': 2})\", \"Vars({'b': 2, 'a': 1})\")\n    \n>       assert repr(A.b[\"c\"]) == \"A.b['c']\"\nE       assert \"S.b['c']\" == \"A.b['c']\"\nE         - A.b['c']\nE         ? ^\nE         + S.b['c']\nE         ? ^\n\nglom\\test\\test_let_vars.py:53: AssertionError\n=========================== short test summary info ===========================\nFAILED glom/test/test_let_vars.py::test_vars - assert \"S.b['c']\" == \"A.b['c']\"\n1 failed in 0.37s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "assertion-level behavioral failure",
+  "failure_class": "behavioral_failure",
+  "stage": "fail_before",
+  "task_id": "03-history-db31bbb570",
+  "verified": true
+}

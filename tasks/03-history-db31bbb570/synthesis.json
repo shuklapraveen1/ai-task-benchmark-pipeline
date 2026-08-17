@@ -1,0 +1,13 @@
+{
+  "changed_files": [
+    "glom/core.py",
+    "glom/test/test_let_vars.py"
+  ],
+  "commit": "03a833dc53fc69173e6c3c9446953e805e622b6a",
+  "parent": "5484cf2179054a9870e72ac8064bc320122bb3f7",
+  "regression_tests": [
+    "glom/test/test_let_vars.py"
+  ],
+  "subject": "fix up duplicate format_t, actually test repr of A",
+  "type": "history"
+}

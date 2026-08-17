@@ -1,0 +1,82 @@
+{
+  "accepted": true,
+  "candidate": {
+    "associated_test_file": null,
+    "associated_test_name": null,
+    "caller_count": 1,
+    "caller_score": 5.0,
+    "callers": [
+      "function:glom.cli.console_main"
+    ],
+    "complexity_score": 7.5,
+    "coverage_percent": null,
+    "coverage_score": 0.0,
+    "file_path": "glom/cli.py",
+    "function_id": "function:glom.cli.main",
+    "line_end": 103,
+    "line_start": 101,
+    "module_id": "module:glom.cli",
+    "name": "main",
+    "public": true,
+    "public_api_bonus": 30.0,
+    "rationale": [
+      "public API surface",
+      "1 internal caller(s)",
+      "suitable structural complexity"
+    ],
+    "score": 42.5,
+    "side_effect_penalty": 0.0,
+    "side_effect_signals": []
+  },
+  "difficulty": "easy",
+  "difficulty_reason": "The task is localized to a single file, so the implementation scope is narrow and focused.",
+  "files_in_scope": [
+    "glom/cli.py"
+  ],
+  "id": "excision:f939591c08ff5a09",
+  "instruction": "Restore the required behavior of function:glom.cli.main. The implementation must satisfy the existing task-local tests.",
+  "module": "glom.cli",
+  "paths": {
+    "evidence": "evidence",
+    "input": "input",
+    "solution": "solution",
+    "verifier": "verifier"
+  },
+  "provenance": {
+    "module": "glom.cli",
+    "source": "excision",
+    "target_function": "function:glom.cli.main"
+  },
+  "schema_version": "1.0",
+  "synthesis": {
+    "changed_files": [
+      "glom/cli.py"
+    ],
+    "input_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/05-excision-f939591c08/input",
+    "solution_commit": null,
+    "solution_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/05-excision-f939591c08/solution",
+    "source_commit": null,
+    "task_type": "excision",
+    "verifier_dir": null,
+    "warnings": []
+  },
+  "task_id": "excision:f939591c08ff5a09",
+  "title": "Restore behavior of function:glom.cli.main",
+  "type": "excision",
+  "validation_status": "passed",
+  "verification": {
+    "deterministic_verified": true,
+    "fail_before_verified": true,
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "verifier_command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "--doctest-modules",
+    "glom"
+  ]
+}

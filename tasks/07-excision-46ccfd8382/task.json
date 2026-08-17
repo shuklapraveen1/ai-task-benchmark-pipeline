@@ -1,0 +1,79 @@
+{
+  "accepted": true,
+  "candidate": {
+    "associated_test_file": null,
+    "associated_test_name": null,
+    "caller_count": 0,
+    "caller_score": 0.0,
+    "callers": [],
+    "complexity_score": 7.5,
+    "coverage_percent": null,
+    "coverage_score": 0.0,
+    "file_path": "glom/mutation.py",
+    "function_id": "function:glom.mutation.assign",
+    "line_end": 213,
+    "line_start": 198,
+    "module_id": "module:glom.mutation",
+    "name": "assign",
+    "public": true,
+    "public_api_bonus": 30.0,
+    "rationale": [
+      "public API surface",
+      "suitable structural complexity"
+    ],
+    "score": 37.5,
+    "side_effect_penalty": 0.0,
+    "side_effect_signals": []
+  },
+  "difficulty": "easy",
+  "difficulty_reason": "The task is localized to a single file, so the implementation scope is narrow and focused.",
+  "files_in_scope": [
+    "glom/mutation.py"
+  ],
+  "id": "excision:46ccfd8382788a9b",
+  "instruction": "Restore the required behavior of function:glom.mutation.assign. The implementation must satisfy the existing task-local tests.",
+  "module": "glom.mutation",
+  "paths": {
+    "evidence": "evidence",
+    "input": "input",
+    "solution": "solution",
+    "verifier": "verifier"
+  },
+  "provenance": {
+    "module": "glom.mutation",
+    "source": "excision",
+    "target_function": "function:glom.mutation.assign"
+  },
+  "schema_version": "1.0",
+  "synthesis": {
+    "changed_files": [
+      "glom/mutation.py"
+    ],
+    "input_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/07-excision-46ccfd8382/input",
+    "solution_commit": null,
+    "solution_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/07-excision-46ccfd8382/solution",
+    "source_commit": null,
+    "task_type": "excision",
+    "verifier_dir": null,
+    "warnings": []
+  },
+  "task_id": "excision:46ccfd8382788a9b",
+  "title": "Restore behavior of function:glom.mutation.assign",
+  "type": "excision",
+  "validation_status": "passed",
+  "verification": {
+    "deterministic_verified": true,
+    "fail_before_verified": true,
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "verifier_command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "--doctest-modules",
+    "glom"
+  ]
+}

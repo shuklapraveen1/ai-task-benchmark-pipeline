@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    "manifest.json",
+    "project.json",
+    "modules.json",
+    "symbols.json",
+    "relationships.json",
+    "repo_graph.json"
+  ],
+  "counts": {
+    "calls": 113703,
+    "diagnostics": 0,
+    "imports": 5921,
+    "inheritance": 483,
+    "modules": 1154,
+    "symbols": 23316
+  },
+  "format": "okf",
+  "schema_version": "1.0"
+}

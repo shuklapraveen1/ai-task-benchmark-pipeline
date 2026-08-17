@@ -1,0 +1,25 @@
+{
+  "actual": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_error.py::test_glom_error_double_stack",
+      "glom/test/test_error.py::test_glom_error_stack",
+      "glom/test/test_error.py::test_regular_error_stack"
+    ],
+    "duration_seconds": 1.0940000000409782,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": "...                                                                      [100%]\n3 passed in 0.41s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "success",
+  "stage": "pass_after",
+  "task_id": "02-history-96a9de66a7",
+  "verified": true
+}

@@ -1,0 +1,90 @@
+{
+  "accepted": true,
+  "task_id": "02-history-96a9de66a7",
+  "validation": {
+    "deterministic_runs": [
+      {
+        "command": [
+          "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "glom/test/test_error.py::test_glom_error_double_stack",
+          "glom/test/test_error.py::test_glom_error_stack",
+          "glom/test/test_error.py::test_regular_error_stack"
+        ],
+        "duration_seconds": 1.0940000000409782,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": "...                                                                      [100%]\n3 passed in 0.41s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      },
+      {
+        "command": [
+          "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "glom/test/test_error.py::test_glom_error_double_stack",
+          "glom/test/test_error.py::test_glom_error_stack",
+          "glom/test/test_error.py::test_regular_error_stack"
+        ],
+        "duration_seconds": 0.6719999997876585,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": "...                                                                      [100%]\n3 passed in 0.04s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      }
+    ],
+    "deterministic_verified": true,
+    "fail_before": {
+      "command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_error.py::test_glom_error_double_stack",
+        "glom/test/test_error.py::test_glom_error_stack",
+        "glom/test/test_error.py::test_regular_error_stack"
+      ],
+      "duration_seconds": 1.1719999997876585,
+      "passed": false,
+      "return_code": 1,
+      "stderr": "",
+      "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n________________________ test_glom_error_double_stack _________________________\n\n    def test_glom_error_double_stack():\n        actual = _make_stack({'results': [{'value': _subglom_wrap}]})\n        expected = \"\"\"\\\n    Traceback (most recent call last):\n      File \"test_error.py\", line ___, in _make_stack\n        glom(target, spec)\n      File \"core.py\", line ___, in glom\n        raise err\n    glom.core.PathAccessError: error raised while processing, details below.\n     Target-spec trace (most recent last):\n     - Target: [None]\n     - Spec: {'results': [{'value': <function _subglom_wrap at\n     - Spec: [{'value': <function _subglom_wrap at\n     - Target: None\n     - Spec: {'value': <function _subglom_wrap at\n     - Spec: <function _subglom_wrap at\n    glom.core.PathAccessError: error raised while processing, details below.\n     Target-spec trace (most recent last):\n     - Target: ['Nested']\n     - Spec: {'internal': ['val']}\n     - Spec: ['val']\n     - Target: 'Nested'\n     - Spec: 'val'\n    glom.core.PathAccessError: could not access 'val', part 0 of Path('val'), got error: AttributeError(\"'str' object has no attribute 'val'\")\n    \"\"\"\n>       assert expected == actual\nE       assert 'Traceback (m...e \\'val\\'\")\\n' == 'Traceback (m...e \\'val\\'\")\\n'\nE         Skipping 203 identical leading characters in diff, use -v to show\nE         - processing.\nE         + processing, details below.\nE         -  Target-spec trace, with error detail (most recent last):\nE         ?                   -------------------\nE         +  Target-spec trace (most recent last):\nE            - Target: [None]...\nE         \nE         ...Full output truncated (18 lines hidden), use '-vv' to show\n\nglom\\test\\test_error.py:215: AssertionError\n____________________________ test_glom_error_stack ____________________________\n\n    def test_glom_error_stack():\n        # NoneType has not attribute value\n        expected = u\"\"\"\\\n    Traceback (most recent call last):\n      File \"test_error.py\", line ___, in _make_stack\n        glom(target, spec)\n      File \"core.py\", line ___, in glom\n        raise err\n    glom.core.PathAccessError: error raised while processing, details below.\n     Target-spec trace (most recent last):\n     - Target: [None]\n     - Spec: {'results': [{'valu�': 'value'}]}\n     - Spec: [{'valu�': 'value'}]\n     - Target: None\n     - Spec: {'valu�': 'value'}\n     - Spec: 'value'\n    glom.core.PathAccessError: could not access 'value', part 0 of Path('value'), got error: AttributeError(\"'NoneType' object has no attribute 'value'\")\n    \"\"\"\n        #import glom.core\n        #glom.core.GLOM_DEBUG = True\n        actual = _make_stack({'results': [{u'valu�': u'value'}]})\n        print(actual)\n>       assert expected == actual\nE       assert 'Traceback (m...\\'value\\'\")\\n' == 'Traceback (m...\\'value\\'\")\\n'\nE         Skipping 203 identical leading characters in diff, use -v to show\nE         - processing.\nE         + processing, details below.\nE         -  Target-spec trace, with error detail (most recent last):\nE         ?                   -------------------\nE         +  Target-spec trace (most recent last):\nE            - Target: [None]...\nE         \nE         ...Full output truncated (7 lines hidden), use '-vv' to show\n\nglom\\test\\test_error.py:172: AssertionError\n---------------------------- Captured stdout call -----------------------------\nTraceback (most recent call last):\n  File \"test_error.py\", line ___, in _make_stack\n    glom(target, spec)\n  File \"core.py\", line ___, in glom\n    raise err\nglom.core.PathAccessError: error raised while processing.\n Target-spec trace, with error detail (most recent last):\n - Target: [None]\n - Spec: {'results': [{'valu�': 'value'}]}\n - Spec: [{'valu�': 'value'}]\n - Target: None\n - Spec: {'valu�': 'value'}\n - Spec: 'value'\nglom.core.PathAccessError: could not access 'value', part 0 of Path('value'), got error: AttributeError(\"'NoneType' object has no attribute 'value'\")\n\n__________________________ test_regular_error_stack ___________________________\n\n    def test_regular_error_stack():\n        actual = _make_stack({'results': [{'value': _raise_exc}]})\n        expected = \"\"\"\\\n    Traceback (most recent call last):\n      File \"test_error.py\", line ___, in _make_stack\n        glom(target, spec)\n      File \"core.py\", line ___, in glom\n        raise err\n    glom.core.GlomError.wrap(Exception): error raised while processing, details below.\n     Target-spec trace (most recent last):\n     - Target: [None]\n     - Spec: {'results': [{'value': <function _raise_exc at\n     - Spec: [{'value': <function _raise_exc at\n     - Target: None\n     - Spec: {'value': <function _raise_exc at\n     - Spec: <function _raise_exc at\n      File \"<boltons.funcutils.FunctionBuilder-0>\", line ___, in _raise_exc\n    Exception: unique message\n    \"\"\"\n        # _raise_exc being present in the second-to-last line above tests\n        # that errors in user-defined functions result in frames being\n        # visible\n>       assert expected == actual\nE       AssertionError: assert 'Traceback (m...que message\\n' == 'Traceback (m...que message\\n'\nE         Skipping 213 identical leading characters in diff, use -v to show\nE         - processing.\nE         + processing, details below.\nE         -  Target-spec trace, with error detail (most recent last):\nE         ?                   -------------------\nE         +  Target-spec trace (most recent last):\nE            - Target: [None]...\nE         \nE         ...Full output truncated (8 lines hidden), use '-vv' to show\n\nglom\\test\\test_error.py:147: AssertionError\n=========================== short test summary info ===========================\nFAILED glom/test/test_error.py::test_glom_error_double_stack - assert 'Traceb...\nFAILED glom/test/test_error.py::test_glom_error_stack - assert 'Traceback (m....\nFAILED glom/test/test_error.py::test_regular_error_stack - AssertionError: as...\n3 failed in 0.46s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "fail_before_verified": true,
+    "pass_after": {
+      "command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_error.py::test_glom_error_double_stack",
+        "glom/test/test_error.py::test_glom_error_stack",
+        "glom/test/test_error.py::test_regular_error_stack"
+      ],
+      "duration_seconds": 1.0940000000409782,
+      "passed": true,
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "...                                                                      [100%]\n3 passed in 0.41s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "warnings": []
+}

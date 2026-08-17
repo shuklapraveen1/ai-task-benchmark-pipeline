@@ -1,0 +1,25 @@
+{
+  "actual": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_error.py::test_midway_branch",
+      "glom/test/test_error.py::test_short_trace"
+    ],
+    "duration_seconds": 1.2030000002123415,
+    "passed": false,
+    "return_code": 1,
+    "stderr": "",
+    "stdout": "FF                                                                       [100%]\n================================== FAILURES ===================================\n_____________________________ test_midway_branch ______________________________\n\n    def test_midway_branch():\n        # midway branch, but then continues\n>       assert _make_stack(Match(Switch(\n            [(1, 1), ('a', 'a'), ([None], T.a)]))) == \"\"\"\\\n    Traceback (most recent call last):\n      File \"test_error.py\", line ___, in _make_stack\n        glom(target, spec)\n      File \"core.py\", line ___, in glom\n        raise err\n    glom.core.PathAccessError: error raised while processing, details below.\n     Target-spec trace (most recent last):\n     - Target: [None]\n     - Spec: Match(Switch([(1, 1), ('a', 'a'), ([None], T.a)]))\n     - Spec: Switch([(1, 1), ('a', 'a'), ([None], T.a)])\n      Failed Branch:\n       - Spec: 1\n       - glom.matching.MatchError: [None] does not match 1\n      Failed Branch:\n       - Spec: 'a'\n       - glom.matching.MatchError: [None] does not match 'a'\n      Failed Branch:\n       - Spec: [None]\n       - Spec: T.a\n    glom.core.PathAccessError: could not access 'a', part 0 of T.a, got error: AttributeError(\"'list' object has no attribute 'a'\")\n    \"\"\"\nE       assert 'Traceback (m...ute \\'a\\'\")\\n' == 'Traceback (m...ute \\'a\\'\")\\n'\nE         Skipping 614 identical leading characters in diff, use -v to show\nE           Spec: T.a\nE         +    - glom.core.PathAccessError: could not access 'a', part 0 of T.a, got error: AttributeError(\"'list' object has no attribute 'a'\")\nE           glom.core.PathAccessError: could not access 'a', part 0 of T.a, got error: AttributeError(\"'list' object has no attribute 'a'\")\n\nglom\\test\\test_error.py:262: AssertionError\n______________________________ test_short_trace _______________________________\n\n    def test_short_trace():\n        stacklifier = ([{'data': S}],)\n        scope = glom([1], stacklifier)[0]['data'][ROOT][LAST_CHILD_SCOPE]\n>       fmtd_stack = format_target_spec_trace(scope, None)\n\nglom\\test\\test_error.py:51: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nglom\\core.py:228: in format_target_spec_trace\n    fmt_t = mk_fmt(\"Target\")\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nlabel = 'Target'\n\n    def mk_fmt(label):\n        pre = indent + \" - \" + label + \": \"\n>       fmt_width = width - len(pre)\nE       TypeError: unsupported operand type(s) for -: 'NoneType' and 'int'\n\nglom\\core.py:226: TypeError\n=========================== short test summary info ===========================\nFAILED glom/test/test_error.py::test_midway_branch - assert 'Traceback (m...u...\nFAILED glom/test/test_error.py::test_short_trace - TypeError: unsupported ope...\n2 failed in 0.52s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "assertion-level behavioral failure",
+  "failure_class": "behavioral_failure",
+  "stage": "fail_before",
+  "task_id": "04-history-2a4ca4f25b",
+  "verified": true
+}

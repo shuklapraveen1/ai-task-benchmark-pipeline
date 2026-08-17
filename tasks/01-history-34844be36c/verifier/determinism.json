@@ -1,0 +1,56 @@
+{
+  "expected": "identical successful runs",
+  "first_run": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_basic.py::test_call_and_target",
+      "glom/test/test_basic.py::test_val",
+      "glom/test/test_let_vars.py::test_let",
+      "glom/test/test_match.py::test_check_ported_tests",
+      "glom/test/test_match.py::test_clamp",
+      "glom/test/test_match.py::test_examples",
+      "glom/test/test_match.py::test_json_ref",
+      "glom/test/test_match.py::test_pattern_matching",
+      "glom/test/test_match.py::test_precedence"
+    ],
+    "duration_seconds": 1.25,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".........                                                                [100%]\n9 passed in 0.58s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "second_run": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "glom/test/test_basic.py::test_call_and_target",
+      "glom/test/test_basic.py::test_val",
+      "glom/test/test_let_vars.py::test_let",
+      "glom/test/test_match.py::test_check_ported_tests",
+      "glom/test/test_match.py::test_clamp",
+      "glom/test/test_match.py::test_examples",
+      "glom/test/test_match.py::test_json_ref",
+      "glom/test/test_match.py::test_pattern_matching",
+      "glom/test/test_match.py::test_precedence"
+    ],
+    "duration_seconds": 0.7179999998770654,
+    "passed": true,
+    "return_code": 0,
+    "stderr": "",
+    "stdout": ".........                                                                [100%]\n9 passed in 0.05s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "stage": "determinism",
+  "task_id": "01-history-34844be36c",
+  "verified": true
+}

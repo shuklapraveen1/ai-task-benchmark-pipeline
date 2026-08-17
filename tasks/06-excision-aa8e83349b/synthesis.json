@@ -1,0 +1,8 @@
+{
+  "function": "function:glom.grouping.GROUP",
+  "line_end": 155,
+  "line_start": 98,
+  "module": "module:glom.grouping",
+  "source_file": "glom/grouping.py",
+  "type": "excision"
+}

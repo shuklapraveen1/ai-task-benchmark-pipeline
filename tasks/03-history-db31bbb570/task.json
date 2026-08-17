@@ -1,0 +1,87 @@
+{
+  "accepted": true,
+  "candidate": {
+    "commit": "03a833dc53fc69173e6c3c9446953e805e622b6a",
+    "files": [
+      "glom/core.py",
+      "glom/test/test_let_vars.py"
+    ],
+    "modules": [
+      "glom.core"
+    ],
+    "parent": "5484cf2179054a9870e72ac8064bc320122bb3f7",
+    "rationale": "Behavioral commit modifies both implementation and tests.",
+    "regression_node_ids": [
+      "glom/test/test_let_vars.py::test_vars"
+    ],
+    "regression_tests": [
+      {
+        "changed_functions": [
+          "test_vars"
+        ],
+        "content": "\nimport pytest\n\nfrom glom import glom, Path, T, S, Literal, Let, A, Vars, GlomError\n\nfrom glom.core import ROOT\nfrom glom.mutation import PathAssignError\n\ndef test_let():\n    data = {'a': 1, 'b': [{'c': 2}, {'c': 3}]}\n    output = [{'a': 1, 'c': 2}, {'a': 1, 'c': 3}]\n    assert glom(data, (Let(a='a'), ('b', [{'a': S['a'], 'c': 'c'}]))) == output\n    assert glom(data, ('b', [{'a': S[ROOT][Literal(T)]['a'], 'c': 'c'}])) == output\n\n    with pytest.raises(TypeError):\n        Let('posarg')\n    with pytest.raises(TypeError):\n        Let()\n\n    assert glom([[1]], (Let(v=Vars()), [[A.v.a]], S.v.a)) == 1\n    assert glom(1, (Let(v=lambda t: {}), A.v['a'], S.v['a'])) == 1\n    with pytest.raises(GlomError):\n        glom(1, (Let(v=lambda t: 1), A.v.a))\n\n    class FailAssign(object):\n        def __setattr__(self, name, val):\n            raise Exception('nope')\n\n    with pytest.raises(PathAssignError):\n        glom(1, (Let(v=lambda t: FailAssign()), Path(A.v, 'a')))\n\n    assert repr(Let(a=T.a.b)) == 'Let(a=T.a.b)'\n\n\ndef test_globals():\n    assert glom([[1]], ([[A.globals.a]], S.globals.a)) == 1\n\n\ndef test_vars():\n    let = Let(v=Vars({'b': 2}, c=3))\n    assert glom(1, (let, A.v.a, S.v.a)) == 1\n    with pytest.raises(AttributeError):\n        glom(1, (let, S.v.a))  # check that Vars() inside a spec doesn't hold state\n    assert glom(1, (let, Path(A, 'v', 'a'), S.v.a)) == 1\n    assert glom(1, (let, S.v.b)) == 2\n    assert glom(1, (let, S.v.c)) == 3\n    assert repr(let) == \"Let(v=Vars({'b': 2}, c=3))\"\n    assert repr(Vars(a=1, b=2)) in (\n        \"Vars(a=1, b=2)\", \"Vars(b=2, a=1)\")\n    assert repr(Vars(a=1, b=2).glomit(None, None)) in (\n        \"Vars({'a': 1, 'b': 2})\", \"Vars({'b': 2, 'a': 1})\")\n\n    assert repr(A.b[\"c\"]) == \"A.b['c']\"\n",
+        "path": "glom/test/test_let_vars.py"
+      }
+    ],
+    "score": 0.65,
+    "source_files": [
+      "glom/core.py"
+    ],
+    "subject": "fix up duplicate format_t, actually test repr of A",
+    "test_files": [
+      "glom/test/test_let_vars.py"
+    ]
+  },
+  "difficulty": "medium",
+  "difficulty_reason": "The task spans 2 files, requiring coordination across a small but non-trivial implementation scope.",
+  "files_in_scope": [
+    "glom/core.py",
+    "glom/test/test_let_vars.py"
+  ],
+  "id": "history:db31bbb570b2cdb9",
+  "instruction": "Implement the behavioral correction required by the task-local regression tests in module glom.core. The implementation must satisfy the task-local regression tests.",
+  "module": "glom.core",
+  "paths": {
+    "evidence": "evidence",
+    "input": "input",
+    "solution": "solution",
+    "verifier": "verifier"
+  },
+  "provenance": {
+    "fixing_commit": "03a833dc53fc69173e6c3c9446953e805e622b6a",
+    "parent_commit": "5484cf2179054a9870e72ac8064bc320122bb3f7",
+    "source": "history-derived"
+  },
+  "schema_version": "1.0",
+  "synthesis": {
+    "changed_files": [
+      "glom/core.py",
+      "glom/test/test_let_vars.py"
+    ],
+    "input_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/03-history-db31bbb570/input",
+    "solution_commit": "03a833dc53fc69173e6c3c9446953e805e622b6a",
+    "solution_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/03-history-db31bbb570/solution",
+    "source_commit": "5484cf2179054a9870e72ac8064bc320122bb3f7",
+    "task_type": "history",
+    "verifier_dir": "C:/projects/AI_Benchmark_Assignment_LH2/glom/tasks/03-history-db31bbb570/verifier",
+    "warnings": []
+  },
+  "task_id": "history:db31bbb570b2cdb9",
+  "title": "fix up duplicate format_t, actually test repr of A",
+  "type": "history",
+  "validation_status": "passed",
+  "verification": {
+    "deterministic_verified": true,
+    "fail_before_verified": true,
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "verifier_command": [
+    "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "glom/test/test_let_vars.py::test_vars"
+  ]
+}

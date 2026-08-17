@@ -1,0 +1,114 @@
+{
+  "accepted": true,
+  "task_id": "01-history-34844be36c",
+  "validation": {
+    "deterministic_runs": [
+      {
+        "command": [
+          "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "glom/test/test_basic.py::test_call_and_target",
+          "glom/test/test_basic.py::test_val",
+          "glom/test/test_let_vars.py::test_let",
+          "glom/test/test_match.py::test_check_ported_tests",
+          "glom/test/test_match.py::test_clamp",
+          "glom/test/test_match.py::test_examples",
+          "glom/test/test_match.py::test_json_ref",
+          "glom/test/test_match.py::test_pattern_matching",
+          "glom/test/test_match.py::test_precedence"
+        ],
+        "duration_seconds": 1.25,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".........                                                                [100%]\n9 passed in 0.58s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      },
+      {
+        "command": [
+          "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "glom/test/test_basic.py::test_call_and_target",
+          "glom/test/test_basic.py::test_val",
+          "glom/test/test_let_vars.py::test_let",
+          "glom/test/test_match.py::test_check_ported_tests",
+          "glom/test/test_match.py::test_clamp",
+          "glom/test/test_match.py::test_examples",
+          "glom/test/test_match.py::test_json_ref",
+          "glom/test/test_match.py::test_pattern_matching",
+          "glom/test/test_match.py::test_precedence"
+        ],
+        "duration_seconds": 0.7179999998770654,
+        "passed": true,
+        "return_code": 0,
+        "stderr": "",
+        "stdout": ".........                                                                [100%]\n9 passed in 0.05s\n",
+        "tests_failed": null,
+        "tests_passed": null,
+        "tests_total": null
+      }
+    ],
+    "deterministic_verified": true,
+    "fail_before": {
+      "command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_basic.py::test_call_and_target",
+        "glom/test/test_basic.py::test_val",
+        "glom/test/test_let_vars.py::test_let",
+        "glom/test/test_match.py::test_check_ported_tests",
+        "glom/test/test_match.py::test_clamp",
+        "glom/test/test_match.py::test_examples",
+        "glom/test/test_match.py::test_json_ref",
+        "glom/test/test_match.py::test_pattern_matching",
+        "glom/test/test_match.py::test_precedence"
+      ],
+      "duration_seconds": 1.2190000000409782,
+      "passed": false,
+      "return_code": 1,
+      "stderr": "",
+      "stdout": "FFF......                                                                [100%]\n================================== FAILURES ===================================\n____________________________ test_call_and_target _____________________________\n\n    def test_call_and_target():\n        class F(object):\n            def __init__(s, a, b, c): s.a, s.b, s.c = a, b, c\n    \n        call_f = Call(F, kwargs=dict(a=T, b=T, c=T))\n        assert repr(call_f)\n        val = glom(1, call_f)\n        assert (val.a, val.b, val.c) == (1, 1, 1)\n        class F(object):\n            def __init__(s, a): s.a = a\n        val = glom({'one': F('two')}, Call(F, args=(T['one'].a,)))\n        assert val.a == 'two'\n        assert glom({'a': 1}, Call(F, kwargs=T)).a == 1\n        assert glom([1], Call(F, args=T)).a == 1\n        assert glom(F, T(T)).a == F\n        assert glom([F, 1], T[0](T[1]).a) == 1\n>       assert glom([[1]], S[UP][Val(T)][0][0]) == 1\n\nglom\\test\\test_basic.py:219: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ntarget = [[1]], spec = S[Sentinel('UP')][Val(T)][0][0], kwargs = {}\ndefault = Sentinel('_MISSING'), skip_exc = (), glom_debug = False\nscope = ChainMap({<class 'glom.core.Path'>: [], <class 'glom.core.Inspect'>: None, Sentinel('MODE'): <function AUTO at 0x00000...m at 0x0000021D6B210700>, <class 'glom.core.TargetRegistry'>: <glom.core.TargetRegistry object at 0x0000021D6B2013C0>})\nerr = PathAccessError(KeyError(Val(T)), S[Sentinel('UP')][Val(T)][0][0], 1)\n\n    def glom(target, spec, **kwargs):\n        \"\"\"Access or construct a value from a given *target* based on the\n        specification declared by *spec*.\n    \n        Accessing nested data, aka deep-get:\n    \n        >>> target = {'a': {'b': 'c'}}\n        >>> glom(target, 'a.b')\n        'c'\n    \n        Here the *spec* was just a string denoting a path,\n        ``'a.b.``. As simple as it should be. The next example shows\n        how to use nested data to access many fields at once, and make\n        a new nested structure.\n    \n        Constructing, or restructuring more-complicated nested data:\n    \n        >>> target = {'a': {'b': 'c', 'd': 'e'}, 'f': 'g', 'h': [0, 1, 2]}\n        >>> spec = {'a': 'a.b', 'd': 'a.d', 'h': ('h', [lambda x: x * 2])}\n        >>> output = glom(target, spec)\n        >>> pprint(output)\n        {'a': 'c', 'd': 'e', 'h': [0, 2, 4]}\n    \n        ``glom`` also takes a keyword-argument, *default*. When set,\n        if a ``glom`` operation fails with a :exc:`GlomError`, the\n        *default* will be returned, very much like\n        :meth:`dict.get()`:\n    \n        >>> glom(target, 'a.xx', default='nada')\n        'nada'\n    \n        The *skip_exc* keyword argument controls which errors should\n        be ignored.\n    \n        >>> glom({}, lambda x: 100.0 / len(x), default=0.0, skip_exc=ZeroDivisionError)\n        0.0\n    \n        Args:\n           target (object): the object on which the glom will operate.\n           spec (object): Specification of the output object in the form\n             of a dict, list, tuple, string, other glom construct, or\n             any composition of these.\n           default (object): An optional default to return in the case\n             an exception, specified by *skip_exc*, is raised.\n           skip_exc (Exception): An optional exception or tuple of\n             exceptions to ignore and return *default* (None if\n             omitted). If *skip_exc* and *default* are both not set,\n             glom raises errors through.\n           scope (dict): Additional data that can be accessed\n             via S inside the glom-spec. Read more: :ref:`scope`.\n    \n        It's a small API with big functionality, and glom's power is\n        only surpassed by its intuitiveness. Give it a whirl!\n    \n        \"\"\"\n        # TODO: check spec up front\n        default = kwargs.pop('default', None if 'skip_exc' in kwargs else _MISSING)\n        skip_exc = kwargs.pop('skip_exc', () if default is _MISSING else GlomError)\n        glom_debug = kwargs.pop('glom_debug', GLOM_DEBUG)\n        scope = _DEFAULT_SCOPE.new_child({\n            Path: kwargs.pop('path', []),\n            Inspect: kwargs.pop('inspector', None),\n            MODE: AUTO,\n            'globals': ScopeVars({}, {}),\n        })\n        scope[UP] = scope\n        scope[ROOT] = scope\n        scope[T] = target\n        scope.update(kwargs.pop('scope', {}))\n        err = None\n        if kwargs:\n            raise TypeError('unexpected keyword args: %r' % sorted(kwargs.keys()))\n        try:\n            try:\n                ret = _glom(target, spec, scope)\n            except skip_exc:\n                if default is _MISSING:\n                    raise\n                ret = default\n        except Exception as e:\n            if glom_debug:\n                raise\n            if isinstance(e, GlomError):\n                # need to change id or else py3 seems to not let us truncate the\n                # stack trace with the explicit \"raise err\" below\n                err = copy.copy(e)\n            else:\n                err = GlomError.wrap(e)\n            if isinstance(err, GlomError):\n                err._finalize(scope[ERROR_SCOPE])\n            else:  # wrapping failed, fall back to default behavior\n                raise\n    \n        if err:\n>           raise err\nE           glom.core.PathAccessError: error raised while processing, details below.\nE            Target-spec trace (most recent last):\nE            - Target: [[1]]\nE            - Spec: S[Sentinel('UP')][Val(T)][0][0]\nE           glom.core.PathAccessError: could not access Val(T), part 1 of S[Sentinel('UP')][Val(T)][0][0], got error: KeyError(Val(T))\n\nglom\\core.py:1985: PathAccessError\n__________________________________ test_val ___________________________________\n\n    def test_val():\n>       assert Literal is Val\nE       assert Literal is Val\n\nglom\\test\\test_basic.py:177: AssertionError\n__________________________________ test_let ___________________________________\n\n    def test_let():\n        data = {'a': 1, 'b': [{'c': 2}, {'c': 3}]}\n        output = [{'a': 1, 'c': 2}, {'a': 1, 'c': 3}]\n        assert glom(data, (Let(a='a'), ('b', [{'a': S['a'], 'c': 'c'}]))) == output\n>       assert glom(data, ('b', [{'a': S[ROOT][Val(T)]['a'], 'c': 'c'}])) == output\n\nglom\\test\\test_let_vars.py:13: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ntarget = {'a': 1, 'b': [{'c': 2}, {'c': 3}]}\nspec = ('b', [{'a': S[Sentinel('ROOT')][Val(T)]['a'], 'c': 'c'}]), kwargs = {}\ndefault = Sentinel('_MISSING'), skip_exc = (), glom_debug = False\nscope = ChainMap({<class 'glom.core.Path'>: ['b'], <class 'glom.core.Inspect'>: None, Sentinel('MODE'): <function AUTO at 0x00...m at 0x0000021D6B210700>, <class 'glom.core.TargetRegistry'>: <glom.core.TargetRegistry object at 0x0000021D6B2013C0>})\nerr = PathAccessError(KeyError(Val(T)), S[Sentinel('ROOT')][Val(T)]['a'], 1)\n\n    def glom(target, spec, **kwargs):\n        \"\"\"Access or construct a value from a given *target* based on the\n        specification declared by *spec*.\n    \n        Accessing nested data, aka deep-get:\n    \n        >>> target = {'a': {'b': 'c'}}\n        >>> glom(target, 'a.b')\n        'c'\n    \n        Here the *spec* was just a string denoting a path,\n        ``'a.b.``. As simple as it should be. The next example shows\n        how to use nested data to access many fields at once, and make\n        a new nested structure.\n    \n        Constructing, or restructuring more-complicated nested data:\n    \n        >>> target = {'a': {'b': 'c', 'd': 'e'}, 'f': 'g', 'h': [0, 1, 2]}\n        >>> spec = {'a': 'a.b', 'd': 'a.d', 'h': ('h', [lambda x: x * 2])}\n        >>> output = glom(target, spec)\n        >>> pprint(output)\n        {'a': 'c', 'd': 'e', 'h': [0, 2, 4]}\n    \n        ``glom`` also takes a keyword-argument, *default*. When set,\n        if a ``glom`` operation fails with a :exc:`GlomError`, the\n        *default* will be returned, very much like\n        :meth:`dict.get()`:\n    \n        >>> glom(target, 'a.xx', default='nada')\n        'nada'\n    \n        The *skip_exc* keyword argument controls which errors should\n        be ignored.\n    \n        >>> glom({}, lambda x: 100.0 / len(x), default=0.0, skip_exc=ZeroDivisionError)\n        0.0\n    \n        Args:\n           target (object): the object on which the glom will operate.\n           spec (object): Specification of the output object in the form\n             of a dict, list, tuple, string, other glom construct, or\n             any composition of these.\n           default (object): An optional default to return in the case\n             an exception, specified by *skip_exc*, is raised.\n           skip_exc (Exception): An optional exception or tuple of\n             exceptions to ignore and return *default* (None if\n             omitted). If *skip_exc* and *default* are both not set,\n             glom raises errors through.\n           scope (dict): Additional data that can be accessed\n             via S inside the glom-spec. Read more: :ref:`scope`.\n    \n        It's a small API with big functionality, and glom's power is\n        only surpassed by its intuitiveness. Give it a whirl!\n    \n        \"\"\"\n        # TODO: check spec up front\n        default = kwargs.pop('default', None if 'skip_exc' in kwargs else _MISSING)\n        skip_exc = kwargs.pop('skip_exc', () if default is _MISSING else GlomError)\n        glom_debug = kwargs.pop('glom_debug', GLOM_DEBUG)\n        scope = _DEFAULT_SCOPE.new_child({\n            Path: kwargs.pop('path', []),\n            Inspect: kwargs.pop('inspector', None),\n            MODE: AUTO,\n            'globals': ScopeVars({}, {}),\n        })\n        scope[UP] = scope\n        scope[ROOT] = scope\n        scope[T] = target\n        scope.update(kwargs.pop('scope', {}))\n        err = None\n        if kwargs:\n            raise TypeError('unexpected keyword args: %r' % sorted(kwargs.keys()))\n        try:\n            try:\n                ret = _glom(target, spec, scope)\n            except skip_exc:\n                if default is _MISSING:\n                    raise\n                ret = default\n        except Exception as e:\n            if glom_debug:\n                raise\n            if isinstance(e, GlomError):\n                # need to change id or else py3 seems to not let us truncate the\n                # stack trace with the explicit \"raise err\" below\n                err = copy.copy(e)\n            else:\n                err = GlomError.wrap(e)\n            if isinstance(err, GlomError):\n                err._finalize(scope[ERROR_SCOPE])\n            else:  # wrapping failed, fall back to default behavior\n                raise\n    \n        if err:\n>           raise err\nE           glom.core.PathAccessError: error raised while processing, details below.\nE            Target-spec trace (most recent last):\nE            - Target: {'a': 1, 'b': [{'c': 2}, {'c': 3}]}\nE            - Spec: ('b', [{'a': S[Sentinel('ROOT')][Val(T)]['a'], 'c': 'c'}])\nE            - Spec: 'b'\nE            - Target: [{'c': 2}, {'c': 3}]\nE            - Spec: [{'a': S[Sentinel('ROOT')][Val(T)]['a'], 'c': 'c'}]\nE            - Target: {'c': 2}\nE            - Spec: {'a': S[Sentinel('ROOT')][Val(T)]['a'], 'c': 'c'}\nE            - Spec: S[Sentinel('ROOT')][Val(T)]['a']\nE           glom.core.PathAccessError: could not access Val(T), part 1 of S[Sentinel('ROOT')][Val(T)]['a'], got error: KeyError(Val(T))\n\nglom\\core.py:1985: PathAccessError\n=========================== short test summary info ===========================\nFAILED glom/test/test_basic.py::test_call_and_target - glom.core.PathAccessEr...\nFAILED glom/test/test_basic.py::test_val - assert Literal is Val\nFAILED glom/test/test_let_vars.py::test_let - glom.core.PathAccessError: erro...\n3 failed, 6 passed in 0.53s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "fail_before_verified": true,
+    "pass_after": {
+      "command": [
+        "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "glom/test/test_basic.py::test_call_and_target",
+        "glom/test/test_basic.py::test_val",
+        "glom/test/test_let_vars.py::test_let",
+        "glom/test/test_match.py::test_check_ported_tests",
+        "glom/test/test_match.py::test_clamp",
+        "glom/test/test_match.py::test_examples",
+        "glom/test/test_match.py::test_json_ref",
+        "glom/test/test_match.py::test_pattern_matching",
+        "glom/test/test_match.py::test_precedence"
+      ],
+      "duration_seconds": 1.25,
+      "passed": true,
+      "return_code": 0,
+      "stderr": "",
+      "stdout": ".........                                                                [100%]\n9 passed in 0.58s\n",
+      "tests_failed": null,
+      "tests_passed": null,
+      "tests_total": null
+    },
+    "pass_after_verified": true,
+    "reasons": [],
+    "validation_passed": true
+  },
+  "warnings": []
+}

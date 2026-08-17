@@ -1,0 +1,16 @@
+{
+  "changed_files": [
+    "glom/core.py",
+    "glom/matching.py",
+    "glom/mutation.py",
+    "glom/streaming.py",
+    "glom/test/test_error.py"
+  ],
+  "commit": "d1c84d2e27f2a5216564414bb7fe06417af54547",
+  "parent": "28138de1da9e7c29a32368c39d2c48e79bfc369a",
+  "regression_tests": [
+    "glom/test/test_error.py"
+  ],
+  "subject": "docs refactor, fix a few bugs, tweak the stack to be a little more readable",
+  "type": "history"
+}

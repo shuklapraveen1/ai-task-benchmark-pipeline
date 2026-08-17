@@ -1,0 +1,25 @@
+{
+  "actual": {
+    "command": [
+      ".venv/Scripts/python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "--doctest-modules",
+      "glom"
+    ],
+    "duration_seconds": 2.1719999997876585,
+    "passed": false,
+    "return_code": 1,
+    "stderr": "",
+    "stdout": ".................s............s......................................... [ 26%]\n........................................................................ [ 53%]\n..............................................................F......... [ 80%]\n...................................................                      [100%]\n================================== FAILURES ===================================\n______________________________ test_flatten_func ______________________________\n\n    def test_flatten_func():\n        target = [[1], [2], [3, 4]]\n>       assert flatten(target) == [1, 2, 3, 4]\nE       assert None == [1, 2, 3, 4]\nE        +  where None = flatten([[1], [2], [3, 4]])\n\nC:\\projects\\AI_Benchmark_ASSIGNMENT_LH2\\glom\\glom\\test\\test_reduction.py:95: AssertionError\n============================== warnings summary ===============================\nglom/test/test_path_and_t.py::test_star_warning\n  C:\\Users\\shukl\\AppData\\Local\\Temp\\task-verifier-input-gbat2nj7\\glom\\core.py:661: UserWarning: '*' and '**' have changed behavior in glom version 23.1. Recommend switch to T['*'] or T['**'].\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n=========================== short test summary info ===========================\nFAILED glom/test/test_reduction.py::test_flatten_func - assert None == [1, 2,...\n1 failed, 264 passed, 2 skipped, 1 warning in 1.36s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "assertion-level behavioral failure",
+  "failure_class": "behavioral_failure",
+  "stage": "fail_before",
+  "task_id": "08-excision-74bf276825",
+  "verified": true
+}

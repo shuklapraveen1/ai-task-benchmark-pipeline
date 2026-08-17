@@ -1,0 +1,24 @@
+{
+  "actual": {
+    "command": [
+      "C:\\projects\\AI_Benchmark_Assignment_LH2\\glom\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "generated_test.py"
+    ],
+    "duration_seconds": 0.7809999999590218,
+    "passed": false,
+    "return_code": 1,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n================================== FAILURES ===================================\n_______________________ test_generated_net_new_behavior _______________________\n\n    def test_generated_net_new_behavior():\n        module = importlib.import_module('glom.matching')\n        implementation = getattr(module, '__benchmark_new_behavior')\n    \n>       assert implementation('benchmark-value') == 'benchmark-value'\nE       AssertionError: assert None == 'benchmark-value'\nE        +  where None = <function __benchmark_new_behavior at 0x000002189205F130>('benchmark-value')\n\ngenerated_test.py:8: AssertionError\n=========================== short test summary info ===========================\nFAILED generated_test.py::test_generated_net_new_behavior - AssertionError: a...\n1 failed in 0.14s\n",
+    "tests_failed": null,
+    "tests_passed": null,
+    "tests_total": null
+  },
+  "expected": "assertion-level behavioral failure",
+  "failure_class": "behavioral_failure",
+  "stage": "fail_before",
+  "task_id": "10-net_new-3f684d388c",
+  "verified": true
+}
