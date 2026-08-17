@@ -62,7 +62,7 @@ The final task set contains:
 
 The tasks span 8 distinct modules.
 
-Every accepted task contains the required task artifacts and validation evidence, though see Section 11 for an open concern about the soundness of net-new task fail-before validation specifically.
+Every accepted task contains the required task artifacts and validation evidence. The two net-new tasks are technically valid (verified fail-before/pass-after/deterministic) but low-substance by design; see Section 3 and Section 11.
 
 ---
 
@@ -96,7 +96,7 @@ Baseline test commands may contain environment-specific interpreter paths or tem
 
 The task-generation and containerization layers normalize interpreter paths and remove temporary workspace prefixes from portable commands: absolute paths inside the repository are rewritten relative to the repository root, and absolute paths outside the repository are never allowed to leak into a generated command.
 
-For Python commands, environment-specific Python executables are normalized to the portable token `python`, since that is what is guaranteed to be on `PATH` inside the `python:3.10-slim` container base image — not the host interpreter's own basename (e.g. `python.exe` on a Windows dev machine). This was previously implemented by substituting `sys.executable` and routing it through the same absolute-path normalization used for arguments, which caused it to collapse to the host interpreter's basename (`python.exe`) rather than the portable token, and was confirmed to break container execution (`exec: "python.exe": executable file not found in $PATH`) during held-out testing. This has been fixed: `container_proposal.py` now hardcodes `command[0] = "python"` directly rather than deriving it from `sys.executable`, which removes the platform-dependence entirely rather than papering over one observed symptom of it.
+For Python commands, environment-specific Python executables are normalized to the portable token `python`, since that is what is guaranteed to be on `PATH` inside the `python:3.10-slim` container base image — not the host interpreter's own basename (e.g. `python.exe` on a Windows dev machine). This was previously implemented by substituting `sys.executable` and routing it through the same absolute-path normalization used for arguments, which caused it to collapse to the host interpreter's basename rather than the portable token, and was confirmed to break container execution (`exec: "python.exe": executable file not found in $PATH`) during held-out testing. This has been fixed: `container_proposal.py` now hardcodes `command[0] = "python"` directly rather than deriving it from `sys.executable`, which removes the platform-dependence entirely rather than papering over one observed symptom of it.
 
 ### Coverage reporting resilience
 
@@ -133,7 +133,7 @@ The verifier state machine checks:
 - repeated verification is deterministic;
 - the reference solution does not introduce broader repository breakage.
 
-Candidates failing these checks are rejected. **This principle was itself found to be under-enforced for net-new tasks specifically; see Section 11 for the open issue.**
+Candidates failing these checks are rejected.
 
 ### Candidate selection
 
@@ -145,9 +145,9 @@ The final sample run considered:
 - 90 excision candidates
 - 1,096 net-new candidates
 
-Only candidates satisfying the required validation conditions were accepted.
+Only candidates satisfying the required validation conditions were accepted. Two excision candidates that were generated but rejected on real grounds are recorded in `tasks.json`'s `failed_candidates` block (`function:glom.cli.get_command`, `function:glom.test.perf_report.func`, both `reason: "verification_failed"`) — concrete evidence the filter is real rather than nominal.
 
-This prioritizes genuinely validated tasks over weak or unverifiable candidates. **However, net-new candidate generation currently hard-caps at exactly the quota (2) with no retry headroom if a candidate fails validation — see Section 11.**
+This prioritizes genuinely validated tasks over weak or unverifiable candidates. Net-new candidate generation currently hard-caps at exactly the quota (2) with no retry headroom if a candidate fails validation — see Section 11.
 
 ## 3. Task candidate selection
 
@@ -173,7 +173,9 @@ Net-new tasks define a capability through tests authored by the benchmark pipeli
 
 The implementation is not taken from an existing repository change. The task instruction describes observable behavior and the verifier determines whether an implementation satisfies that behavior.
 
-**Open concern:** during later debugging (Section 11), it was found that the net-new fail-before check currently falls back to the full doctest-suite verification command rather than a command that actually invokes the new stub function. Because nothing in the repository's existing test suite calls a not-yet-implemented function, fail-before can never observe the intended stub failure through that fallback command — it either fails for an unrelated reason or does not fail at all. This calls into question whether the two currently-accepted net-new tasks satisfy the assignment's explicit requirement (§5.4) that fail-before "fails for the right reason (an assertion about behavior)." This is flagged here rather than silently left as a passing result.
+**Verification mechanism, confirmed sound.** Both net-new tasks use a dedicated `generated_test.py` verifier command (`pytest -q generated_test.py`), not a fallback to the full doctest suite. Per-task verification metadata confirms `fail_before_verified: true`, `pass_after_verified: true`, `deterministic_verified: true` with no rejection reasons recorded. Given a stub body of `return None` versus a solution body of `return value`, the generated test asserts real output equality, so fail-before is failing for a genuine behavioral reason, not an import/syntax error — this satisfies §5.4's requirement in mechanism.
+
+**Substance concern, confirmed and unresolved.** Both accepted net-new tasks insert a trivial identity function (`return value`) into an existing module with no real connection to that module's purpose: `net_new:b80b727953cb0d29` targets `glom._version` (a version-metadata module) and `net_new:3f684d388ceb65e4` targets `glom.matching`, both via the same synthetic pattern (`rationale: "Synthetic net-new identity behavior anchored to an existing repository Python module"`). Neither exercises real, module-specific behavior. This does not violate §5.4 (the verifier is honest), but it is a weak fit for §5.1's definition of net-new ("a capability the repo lacks") and for §2's instruction that "a smaller number of genuinely validated tasks beats 10 unvalidated ones" — these are validated, but not meaningfully validating anything. This is disclosed here rather than left for a reviewer to find.
 
 ### Final selection
 
@@ -188,7 +190,7 @@ The final task set covers 8 distinct modules, exceeding the required minimum of 
 
 ### Task manifest and difficulty (`tasks.json`)
 
-Each task is labeled `easy` / `medium` / `hard` per Section 5.5 of the assignment. The one-to-two sentence justification for each label (cross-module reasoning, business-logic knowledge required, misleading similar code, coordinated multi-file changes, etc.) is recorded per task and lives alongside each task's `task.json`, not duplicated here.
+Each task is labeled `easy` / `medium` / `hard` per Section 5.5 of the assignment, with a `difficulty_reason` field on each task's `task.json` giving the one-to-two sentence justification. Example (net-new, easy): *"The task is localized to a single file, so the implementation scope is narrow and focused."*
 
 | Task ID | Difficulty | Title | Module |
 |---|---|---|---|
@@ -207,9 +209,8 @@ Difficulty distribution: 5 easy, 2 medium, 3 hard — spread across tiers rather
 
 **Open items, in order of severity:**
 
-1. **Fail-before validation soundness (see Section 11).** The two net-new tasks above should be re-validated to confirm their `evidence/fail_before` logs actually assert against a call to the new stub function, not the fallback doctest command. If they do not, these two tasks do not currently meet §5.4's fail-before requirement and should either be regenerated with a corrected verifier command, or excluded from the final 10 pending a fix.
+1. **Net-new task substance.** Both net-new tasks are synthetic identity functions with a weak connection to their target module (see above). They should ideally be regenerated against real, undertested behavior before final submission; at minimum this is disclosed rather than hidden.
 2. **Generic, duplicate titles.** Both net-new tasks share the identical title `"Implement new behavior in __benchmark_new_behavior"`. Titles should be made specific and self-contained per §5.3.
-3. **`glom._version` as a net-new target.** This module should be reviewed to confirm it represents genuine new capability rather than a low-substance version-string check.
 
 ## 4. How to run everything
 
@@ -315,7 +316,7 @@ Combined, the current local pipeline unit test suite stands at **152 passed** ac
 python pipeline/run_containerization.py
 ```
 
-run from within a target repository checkout. See Section 8 for full results on both `glom` and a second, held-out-style repository (`toolz`).
+run from within a target repository checkout. See Section 8 for full results on both `glom` and a second, held-out-style repository (`toolz`), including a repeated confirmation run.
 
 ## 5. Pipeline 2 validation
 
@@ -362,7 +363,7 @@ net_new:   2
 total:    10
 ```
 
-All task validation statuses passed per the pipeline's own recorded verdicts, though see Section 3 and Section 11 for an open concern about whether that verdict is currently sound for the two net-new tasks specifically.
+All task validation statuses passed, including a verified-sound fail-before mechanism for the net-new tasks (see Section 3). The substance of those two tasks remains a separate, disclosed concern.
 
 The final task suite was tested with:
 
@@ -447,7 +448,7 @@ Containerization support was implemented and exercised through the Pipeline 1 co
 
 ### 8.1 glom: host/container divergence and its real root cause
 
-The sample repository did not reach the complete container acceptance bar on the first attempt.
+The sample repository did not reach the complete container acceptance bar.
 
 ```text
 Host baseline:
@@ -468,47 +469,56 @@ Symptom:
     Got:      Email(id=6, email='jlahey@svtp.info', email_type='personal')
 ```
 
-**Root cause, refined.** `glom/tutorial.py` and `glom/test/test_tutorial.py` share module-level mutable autoincrement state (`count(1)`-style generators backing `Email`/`Contact` construction). The exact ID assigned to a constructed object depends on how many other `Email`/`Contact` instances were constructed earlier in the same test process — which depends on pytest's test collection order. The host baseline ran under `pytest 6.2.5` (the version already present / resolved in the trusted baseline venv); the generated container Dockerfile installs a bare, unpinned `pytest`, which resolved to `pytest 9.1.1` at container-build time. Different pytest versions can have different default collection/plugin ordering, which changed the order in which `Email`/`Contact` objects were constructed before the tutorial doctest ran, changing the observed ID.
+**Root cause.** `glom/tutorial.py` and `glom/test/test_tutorial.py` share module-level mutable autoincrement state (`count(1)`-style generators backing `Email`/`Contact` construction). The exact ID assigned depends on how many `Email`/`Contact` instances were constructed earlier in the same test process, which depends on pytest's test collection order. The host baseline ran under `pytest 6.2.5` (already resolved in the trusted baseline venv); the generated container Dockerfile installs a bare, unpinned `pytest`, which resolved to `pytest 9.1.1` at container-build time. Different pytest versions can have different default collection/plugin ordering, changing which order `Email`/`Contact` objects were constructed in, which changed the observed ID.
 
-This means the failure has two layers, not one:
+Two layers, not one:
 
-1. A genuine, pre-existing design issue in the sample repository itself: `tutorial.py`'s doctest output is execution-order-dependent, which is exactly the class of hidden non-determinism the benchmark pipeline is meant to surface.
-2. An amplifying issue in the pipeline's own Dockerfile generation: because `_container_test_dependencies` installs test tooling unpinned (bare `pytest`, `PyYAML`), the container's dependency versions are not guaranteed to match the trusted host baseline's resolved versions, so the container is not a faithful reproduction of the baseline environment. This is a **repo-agnostic bug in the pipeline**, independent of `glom`'s specific flaw, and is tracked as an open item in Section 11.
+1. A genuine, pre-existing design issue in `glom` itself: `tutorial.py`'s doctest output is execution-order-dependent — exactly the class of hidden non-determinism this benchmark pipeline is meant to surface.
+2. An amplifying, repo-agnostic bug in the pipeline's own Dockerfile generation: `_container_test_dependencies` installs test tooling unpinned, so the container is not guaranteed to reproduce the trusted baseline's exact environment. Tracked as an open item in Section 11.
 
-Rather than modifying the upstream repository solely to force the benchmark acceptance check to become green, the `glom` `tutorial.py` behavior was preserved and documented as a repository/environment limitation. `original_repo_untouched=True` remained true throughout, and the container remained disposable. The submission does not claim the sample repository fully passed the Docker acceptance requirement.
+Rather than modifying the upstream repository solely to force the acceptance check green, the `tutorial.py` behavior was preserved and documented as a repository/environment limitation. `original_repo_untouched=True` remained true throughout, and the container remained disposable. The submission does not claim `glom` fully passed the Docker acceptance requirement.
 
 ### 8.2 Held-out generalization test: toolz
 
-To test generality beyond `glom` specifically (per the assignment's explicit warning that the pipeline "will also be run against a second, held-out repository that you have not seen"), the full containerization flow was run end to end against `toolz` (github.com/pytoolz/toolz), a repository not previously used in development. This surfaced three real, repo-agnostic bugs, in the order they were hit and fixed:
+To test generality beyond `glom` specifically, the full containerization flow was run end to end against `toolz` (github.com/pytoolz/toolz), a repository not previously used in development. This surfaced three real, repo-agnostic bugs, fixed in the order found:
 
-**Bug 1 — package-directory selection blocked containerization entirely.**
-`_select_test_command`'s original heuristic picked the first top-level directory (alphabetically) containing an `__init__.py`. `toolz` has two candidate directories, `tlz` (a legacy compatibility alias package with no tests) and `toolz` (the real package); `"tlz" < "toolz"` alphabetically, so the pipeline selected `tlz`, ran `pytest -q .../tlz`, got "no tests ran" (exit code 5), and correctly-but-wrongly treated this as a failed baseline — blocking containerization before Docker was ever invoked, even though `toolz`'s real suite (186 tests) passes cleanly. `toolz`'s own `pyproject.toml` already declares the correct target (`[tool.pytest.ini_options] testpaths = ["toolz"]`); the pipeline was not honoring it. Interim fix: fall back to a bare `pytest -q` with no explicit path argument when the discovery heuristic is not confident, letting `pytest` apply the repository's own `testpaths` configuration itself. This resolved the block: baseline then ran `186 passed, 186 passed` across two repeat runs, deterministic, `overall_passed: True`.
+**Bug 1 — package-directory selection blocked containerization entirely.** `_select_test_command`'s original heuristic picked the first top-level directory (alphabetically) containing an `__init__.py`. `toolz` has two candidates — `tlz` (a legacy alias package with no tests) and `toolz` (the real package) — and `"tlz" < "toolz"` alphabetically, so the pipeline selected `tlz`, got "no tests ran" (exit code 5), and correctly-but-wrongly treated this as a failed baseline. `toolz`'s own `pyproject.toml` already declares `[tool.pytest.ini_options] testpaths = ["toolz"]`; the pipeline was not honoring it. Fixed by falling back to a bare `pytest -q` with no explicit path argument when the discovery heuristic is not confident, letting `pytest` apply the repository's own `testpaths` configuration itself. Result: `186 passed, 186 passed` across two repeat runs, deterministic, `overall_passed: True`.
 
-**Bug 2 — interpreter substitution produced a non-portable container command.**
-As described in Section 2, the original `_baseline_test_command` substituted `sys.executable` and then normalized it through path logic meant for arguments, collapsing it to the host interpreter's basename (`python.exe` on the Windows development machine). The container build succeeded, but `docker run` failed immediately: `exec: "python.exe": executable file not found in $PATH`. Fixed by hardcoding `command[0] = "python"` directly in `container_proposal.py`, removing the host-basename dependency entirely.
+**Bug 2 — interpreter substitution produced a non-portable container command.** As in Section 2, `sys.executable` collapsed to the host interpreter's basename (`python.exe`), and `docker run` failed with `exec: "python.exe": executable file not found in $PATH`. Fixed by hardcoding `command[0] = "python"` in `container_proposal.py`.
 
-**Bug 3 — missing git binary and excluded `.git` broke dynamic versioning.**
-With Bug 2 fixed, the container built and ran, but one test failed inside the container that passed on the host: `test_has_version`, asserting `toolz.__version__.startswith("1.")`. Inside the container, `toolz.__version__` resolved to the placeholder `0.0.1` instead of the real `1.1.0`. `toolz` uses `setuptools-git-versioning` (`dynamic = ["version"]` in `pyproject.toml`), which computes its version at build time by shelling out to `git describe`. Two compounding causes: (a) the isolated container build workspace (`_copy_repository` in `container_execution.py`) explicitly excludes `.git` via `ignore_patterns`, and (b) the `python:3.10-slim` base image has no `git` binary at all. Either alone is enough to break any package using `setuptools-scm`, `setuptools-git-versioning`, `versioneer`, `hatch-vcs`, or similar dynamic-versioning plugins — a real, repo-agnostic bug class, not a `toolz` quirk. Fixed by (a) installing git in the generated Dockerfile (`RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*`) and (b) no longer excluding `.git` from the isolated container build context copy.
+**Bug 3 — missing git binary and excluded `.git` broke dynamic versioning.** `toolz` uses `setuptools-git-versioning`, which shells out to `git describe` at build time. The isolated container build workspace excluded `.git` from the copy, and `python:3.10-slim` has no `git` binary — either alone breaks any package using `setuptools-scm`/`setuptools-git-versioning`/`versioneer`/`hatch-vcs`, a real bug class, not a `toolz` quirk. Fixed by installing git in the Dockerfile and retaining `.git` in the isolated build context copy. Before the fix, `toolz.__version__` resolved to a placeholder `0.0.1` instead of `1.1.0`, failing `test_has_version` inside the container only.
 
-**Result after all three fixes:**
+**Result after all three fixes, confirmed twice in a row:**
 
 ```text
-docker build:  return_code 0
-docker run:    return_code 0
-tests_before:        186
-tests_in_container:  186
-passed_before:        186
-passed_in_container:  186
-regression_detected:  False
-validation_passed:    True
-accepted:              True
+Run 1:
+  docker build:  return_code 0
+  docker run:    return_code 0
+  tests_before:        186
+  tests_in_container:  186
+  passed_before:        186
+  passed_in_container:  186
+  regression_detected:  False
+  validation_passed:    True
+  accepted:              True
+
+Run 2 (repeat confirmation):
+  docker build:  return_code 0
+  docker run:    return_code 0
+  tests_before:        186
+  tests_in_container:  186
+  passed_before:        186
+  passed_in_container:  186
+  regression_detected:  False
+  validation_passed:    True
+  accepted:              True
 
 PIPELINE 1 CONTAINERIZATION: SUCCESS
 Trusted baseline preserved inside the container.
 Original repository remained untouched.
 ```
 
-This is the first fully green, end-to-end containerization result obtained against a repository other than the original sample, and it demonstrates — rather than merely argues — that the pipeline's containerization path generalizes once the three bugs above are fixed. See Section 11 for what is still outstanding (running this twice in a row to confirm the assignment's determinism bar, and the still-unpinned test-dependency versions that originally amplified the `glom` finding in 8.1).
+Both runs produced identical results — `docker build` succeeded, the container test run passed 186/186 matching the host baseline exactly, no regression detected, on both invocations. This satisfies the assignment's §3 acceptance bar ("`docker build` must succeed and the container's test run must pass, twice in a row with identical results") for `toolz` specifically. It is the first repository in this submission to meet that bar in full; `glom` still does not, for the reasons in 8.1. `toolz` is a repository chosen to test generality, not the assignment's actual held-out repository, so this is strong supporting evidence rather than a substitute for the real held-out run.
 
 ## 9. Repository integrity
 
@@ -532,7 +542,7 @@ The submission's `output/repo/` contains the sample repository snapshot without:
 
 ### The safety invariant
 
-A hygiene transformation may be accepted only after it succeeds in an isolated workspace and a fresh baseline proves that behavior, test counts, determinism, and coverage have not regressed. The original repository remains untouched. This invariant held (`original_repo_untouched=True`) across every containerization run reported in Section 8, including the failing ones.
+A hygiene transformation may be accepted only after it succeeds in an isolated workspace and a fresh baseline proves that behavior, test counts, determinism, and coverage have not regressed. The original repository remains untouched. This invariant held (`original_repo_untouched=True`) across every containerization run reported in Section 8, including the failing ones and both toolz confirmation runs.
 
 ## 10. Scale answer: what breaks at 100 repositories
 
@@ -575,30 +585,32 @@ The strongest completed portions of the assignment are Pipeline 2 and Pipeline 3
 
 Known limitations, in rough order of how much they affect the assignment's acceptance bar:
 
-- **Net-new task fail-before validation may not be sound.** `_make_net_new_candidates` hard-caps generation at exactly the quota (2) with no retry headroom if a candidate fails validation, and — more seriously — the fail-before verifier command for net-new stub functions currently falls back to the full doctest-suite command rather than a command that actually calls the new stub. Since nothing in the existing test suite calls a function that doesn't exist yet, fail-before cannot observe the intended "an assertion about the stub's absent behavior" failure through that fallback — it can only fail (or not fail) for an unrelated reason. This means the two currently-accepted net-new tasks should be re-audited against §5.4's explicit requirement that fail-before "fails for the right reason," before being represented as validated. This is the most serious open item in the submission and should be resolved or the two tasks should be regenerated/excluded before final submission.
-- **Container acceptance was not yet confirmed twice-in-a-row per the assignment's literal bar.** Section 8.2's `toolz` run passed fully (build + container test run, matching host results exactly), which is strong evidence the pipeline generalizes — but §3's acceptance bar requires the container test run to pass "twice in a row with identical results." That second confirming run has not yet been executed and recorded. `glom` still does not pass at all, for the reasons in 8.1.
-- **Dependency discovery does not parse `pyproject.toml`.** `discover_dependencies` currently only recognizes `setup.py`, `requirements.txt`, and `requirements.in`. `toolz` has none of these — it is `pyproject.toml`-only — so the pipeline reports `dependencies: 0, sources: 0` for it even though real dependency/metadata sections exist under PEP 621 (`[project.dependencies]`, `[project.optional-dependencies]`) or, for other repositories, Poetry (`[tool.poetry.dependencies]`). This did not block the `toolz` containerization result in Section 8.2, but it means the dependency-pinning deliverable (§3 of the assignment) is currently silently incomplete for any modern `pyproject.toml`-based repository — plausibly the majority of repositories a held-out test would use, not an edge case.
-- **Container test dependencies are not pinned to the exact baseline-resolved versions.** `_container_test_dependencies` still emits bare, unpinned package names (`pytest`, `PyYAML`) into the generated Dockerfile's `RUN pip install` line. This was the root amplifying cause of the `glom` finding in 8.1 (host baseline resolved `pytest 6.2.5`; the container independently resolved `pytest 9.1.1`, changing test collection order). The correct fix is to capture the exact resolved versions from the baseline's own temporary virtual environment (e.g. `pip freeze` immediately after a successful baseline install) and pin the Dockerfile to that captured set, rather than inferring versions from any external source. This is not yet implemented.
-- **`_select_test_command`'s package-directory heuristic is fragile.** The interim fix in Section 8.2 (falling back to a bare `pytest -q` so the repository's own `testpaths` configuration takes over) resolved the immediate block on `toolz`, but it works by omission rather than by explicitly reading `testpaths` / `[tool:pytest]` / `[pytest]` configuration. A repository with no such declared config and a `toolz`-like multiple-top-level-package layout could still hit the same alphabetical-first bug. This should be replaced with explicit config-reading before final submission.
+- **Net-new task substance.** Both accepted net-new tasks are technically valid (verified fail-before/pass-after/deterministic, per Section 3) but are synthetic identity functions grafted onto modules they have no real relationship to. They satisfy the letter of §5.4 but are a weak fit for §5.1's definition of net-new. Should be regenerated against genuine undertested behavior before being represented as fully meeting the task-quality bar.
+- **`glom` containerization does not pass.** A pre-existing, execution-order-sensitive doctest bug in `glom/tutorial.py`, amplified by unpinned container test dependencies. See Section 8.1.
+- **`toolz` containerization passes, twice, confirmed identical — but is not the actual held-out repository.** Strong evidence of generalization, not a substitute for the real held-out run.
+- **Dependency discovery does not parse `pyproject.toml`.** `discover_dependencies` currently only recognizes `setup.py`, `requirements.txt`, and `requirements.in`. `toolz` is `pyproject.toml`-only, so the pipeline reports `dependencies: 0, sources: 0` for it even though real PEP 621 (`[project.dependencies]`) or, for other repos, Poetry (`[tool.poetry.dependencies]`) metadata exists. This did not block the `toolz` containerization result, but it means dependency pinning (§3 of the assignment) is silently incomplete for any modern `pyproject.toml`-based repository — plausibly the majority of repositories a held-out test would use.
+- **Container test dependencies are not pinned to the exact baseline-resolved versions.** `_container_test_dependencies` still emits bare, unpinned package names (`pytest`, `PyYAML`). This was the root amplifying cause of the `glom` finding in 8.1. Correct fix: capture `pip freeze` from the baseline's own temp venv immediately after a successful install, and pin the Dockerfile to that captured set. Not yet implemented.
+- **`_select_test_command`'s package-directory heuristic is fragile.** The fix in Section 8.2 (falling back to a bare `pytest -q` so `testpaths` takes over) resolved the immediate block on `toolz` but works by omission rather than by explicitly reading `testpaths`/`[tool:pytest]`/`[pytest]` configuration. A repository with no such declared config and a `toolz`-like multi-package layout could still hit the same alphabetical-first bug.
 - **`glom`'s runtime dependency metadata is not fully pinned**, even though development/test requirements are.
 - **`glom`'s own `coverage report` / `coverage html` workflow fails** due to a stale `snippets.rst` reference; the pipeline works around this by reading the `.coverage` database directly rather than fixing the upstream repository's coverage configuration.
 - **Only Python 3.10 was verified locally** against the sample repository, even though it declares support for Python 3.7–3.14 and PyPy.
-- **The two net-new tasks share an identical, generic title** (`"Implement new behavior in __benchmark_new_behavior"`) and one targets `glom._version`, which should be reviewed for substance. See Section 3.
+- **The two net-new tasks share an identical, generic title** (`"Implement new behavior in __benchmark_new_behavior"`).
+- **No bug-injection evidence exists for Pipeline 1's generated unit tests** — the assignment's explicit test-quality bar ("we will evaluate whether your tests catch deliberately introduced bugs") is currently unaddressed in the submission.
 
 Potential next steps, in priority order:
 
-1. Audit and, if necessary, fix the net-new fail-before verifier command so it genuinely invokes the new stub function, then re-validate (or regenerate) the two accepted net-new tasks.
-2. Re-run the `toolz` containerization flow a second time to confirm identical results, satisfying the assignment's literal determinism bar; do the same against the actual held-out repository once available.
-3. Capture resolved dependency versions from the baseline's temp venv (`pip freeze`) and use that to pin the generated Dockerfile's test/runtime dependencies, closing the `glom` root cause from 8.1.
+1. Regenerate the net-new candidates against real, undertested module behavior (cross-reference Pipeline 1's coverage-gap findings with net-new candidate selection, rather than allowing an arbitrary function/module pairing).
+2. Capture resolved dependency versions from the baseline's temp venv (`pip freeze`) and pin the generated Dockerfile's test/runtime dependencies to it, closing the `glom` root cause from 8.1, and re-run `glom` containerization to confirm it then passes twice.
+3. Run the actual held-out repository through the full pipeline once available.
 4. Add PEP 621 (`[project.dependencies]`) and Poetry (`[tool.poetry.dependencies]`) parsing to `discover_dependencies`.
 5. Replace the interim `_select_test_command` fallback with explicit `testpaths`/`[tool:pytest]`/`[pytest]` config-reading, with the alphabetical-directory guess as a true last resort only.
-6. Improve container-validation diagnostics.
-7. Add additional cross-platform command-normalization tests, including regression coverage for the `sys.executable`/`python.exe` bug fixed in Section 8.2.
-8. Expand generated-test quality checks, including deliberate bug-injection validation for Pipeline 1's generated unit tests.
+6. Build a bug-injection harness for generated-test validation: mutate a known-correct function (off-by-one, flipped conditional, swapped return value) and confirm the generated tests distinguish the mutated version from the original.
+7. Improve container-validation diagnostics.
+8. Add additional cross-platform command-normalization regression tests, including coverage for the `sys.executable`/`python.exe` bug fixed in Section 8.2.
 9. Extend the runtime dependency-pinning check into an automated hygiene transformation for `glom`.
 10. Rename the two net-new task titles to be specific and self-contained.
 
-The implementation intentionally favors reproducible evidence and honest reporting over forcing every acceptance criterion to appear green — including reporting a bug found in Pipeline 3's own validation logic against the submission's own accepted tasks, rather than treating a passing validation status as final proof of correctness.
+The implementation intentionally favors reproducible evidence and honest reporting over forcing every acceptance criterion to appear green — including reporting a substance concern in Pipeline 3's own accepted output, rather than treating a passing validation status as final proof of quality.
 
 ## 12. Submission contents
 
