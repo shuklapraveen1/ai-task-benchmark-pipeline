@@ -6,7 +6,7 @@ import venv
 import os
 import tempfile
 import shutil
-
+import configparser
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, Union
@@ -553,6 +553,77 @@ def _ensure_test_frameworks(
 
     return None
 
+def _has_explicit_pytest_config(repo_path):
+    """
+    Return True when the repository explicitly configures pytest test
+    discovery through a supported configuration file.
+
+    Supported locations:
+      - pytest.ini
+      - .pytest.ini
+      - setup.cfg [tool:pytest]
+      - pyproject.toml [tool.pytest.ini_options]
+
+    The repository's own pytest configuration is authoritative.
+    """
+    repo_path = Path(repo_path)
+
+    # -------------------------------------------------------------
+    # pytest.ini / .pytest.ini
+    # -------------------------------------------------------------
+    for filename in ("pytest.ini", ".pytest.ini"):
+        config_path = repo_path / filename
+
+        if config_path.is_file():
+            parser = configparser.ConfigParser()
+
+            try:
+                parser.read(config_path, encoding="utf-8")
+            except (OSError, configparser.Error):
+                continue
+
+            if parser.has_section("pytest"):
+                return True
+
+    # -------------------------------------------------------------
+    # setup.cfg
+    # -------------------------------------------------------------
+    setup_cfg = repo_path / "setup.cfg"
+
+    if setup_cfg.is_file():
+        parser = configparser.ConfigParser()
+
+        try:
+            parser.read(setup_cfg, encoding="utf-8")
+        except (OSError, configparser.Error):
+            parser = None
+
+        if parser is not None and parser.has_section("tool:pytest"):
+            return True
+
+    # -------------------------------------------------------------
+    # pyproject.toml
+    #
+    # Python 3.10 does not have tomllib, so avoid introducing a
+    # dependency just for this small discovery operation.
+    # -------------------------------------------------------------
+    pyproject = repo_path / "pyproject.toml"
+
+    if pyproject.is_file():
+        try:
+            text = pyproject.read_text(encoding="utf-8")
+        except OSError:
+            text = ""
+
+        if re.search(
+            r"(?m)^\s*\[tool\.pytest\.ini_options\]\s*$",
+            text,
+        ):
+            return True
+
+    return False
+
+
 def _select_test_command(
     repo_path,
     context,
@@ -561,9 +632,11 @@ def _select_test_command(
     """
     Select a safe test command for the discovered repository.
 
-    For pytest repositories using doctests, target the repository's
-    Python package rather than recursively collecting every Python
-    module in the repository.
+    Repository-declared pytest configuration is authoritative. If pytest
+    configuration exists, pytest itself is allowed to resolve testpaths.
+
+    Only when no explicit pytest configuration exists do we fall back to
+    the package-directory heuristic used for doctest repositories.
     """
 
     repo_path = Path(repo_path)
@@ -578,32 +651,56 @@ def _select_test_command(
             "-q",
         ]
 
+        has_pytest_config = _has_explicit_pytest_config(repo_path)
+
+        # ---------------------------------------------------------
+        # Explicit pytest configuration
+        # ---------------------------------------------------------
+        #
+        # Let the repository's own pytest configuration determine
+        # testpaths. Do NOT append an automatically selected package.
+        #
+        # Example:
+        #
+        #   [tool.pytest.ini_options]
+        #   testpaths = ["toolz"]
+        #
+        # pytest will correctly discover toolz/tests/... itself.
+        #
+        if has_pytest_config:
+            if "doctest" in frameworks:
+                command.append("--doctest-modules")
+
+            return command, "pytest"
+
+        # ---------------------------------------------------------
+        # No explicit pytest configuration
+        # ---------------------------------------------------------
+        #
+        # For doctest repositories, target a likely Python package
+        # rather than recursively collecting the entire repository.
+        #
         if "doctest" in frameworks:
             command.append("--doctest-modules")
 
-        # Find a likely top-level Python package.
-        #
-        # We deliberately avoid scanning the whole repository because
-        # --doctest-modules applied to "." can collect unrelated files
-        # such as docs/conf.py.
-        package_dir = None
+            package_dir = None
 
-        for candidate in sorted(repo_path.iterdir()):
-            if not candidate.is_dir():
-                continue
+            for candidate in sorted(repo_path.iterdir()):
+                if not candidate.is_dir():
+                    continue
 
-            if not (candidate / "__init__.py").exists():
-                continue
+                if not (candidate / "__init__.py").exists():
+                    continue
 
-            # This is our pipeline, not the target repository package.
-            if candidate.name == "pipeline":
-                continue
+                # This is our pipeline, not the target repository.
+                if candidate.name == "pipeline":
+                    continue
 
-            package_dir = candidate
-            break
+                package_dir = candidate
+                break
 
-        if package_dir is not None:
-            command.append(str(package_dir))
+            if package_dir is not None:
+                command.append(str(package_dir))
 
         return command, "pytest"
 

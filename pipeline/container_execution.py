@@ -99,7 +99,6 @@ def _copy_repository(repo_path):
         source,
         destination,
         ignore=shutil.ignore_patterns(
-            ".git",
             ".venv",
             "venv",
             "__pycache__",
