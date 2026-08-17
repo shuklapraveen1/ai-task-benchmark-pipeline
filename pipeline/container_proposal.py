@@ -46,7 +46,7 @@ def _baseline_test_command(baseline, context):
 
     # The baseline may contain the host virtualenv interpreter.
     # Docker only has `python`.
-    command[0] = sys.executable
+    command[0] = "python"
 
     repo_root = Path(context.repo_path).resolve()
 
